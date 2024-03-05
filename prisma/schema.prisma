@@ -1,0 +1,155 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_PRISMA_URL")
+}
+
+// Modelo para a tabela "user"
+model User {
+  id                 String    @id @default(uuid())
+  username           String    @unique
+  password           String
+  create_date        DateTime  @default(now())
+  updated_date       DateTime  @default(now())
+  last_login         DateTime?
+  hach_refresh_token String?
+
+  // Chave primária
+  @@map("user")
+}
+
+model curriculum {
+  id                    String                  @unique @default(uuid())
+  name                  String
+  cpf                   String
+  rg                    String
+  email                 String
+  password              String
+  phone                 String
+  patio                 String
+  neighborhood          String
+  number                String
+  zip_code              String
+  created_at            DateTime                @default(now())
+  read_at               DateTime?
+  disabled_at           DateTime?
+  education             education[]
+  vacancyParticipations vacancyParticipations[]
+}
+
+model education {
+  id            String        @unique @default(uuid())
+  type          String
+  institution   String
+  duration      String?
+  completed_on  DateTime
+  arquive       String?
+  curriculum_id String
+  disabled_at   DateTime?
+  curriculum    curriculum    @relation(fields: [curriculum_id], references: [id])
+  typ           typeEducation @relation(fields: [type], references: [name])
+}
+
+model typeEducation {
+  name      String      @unique
+  education education[]
+}
+
+model selectProcess {
+  id                    String                  @unique @default(uuid())
+  name                  String
+  sector                String
+  vacancyIssuer         String
+  open_at               DateTime                @default(now())
+  closed_at             DateTime?
+  vacancyParticipations vacancyParticipations[]
+}
+
+model vacancyParticipations {
+  idVacancy    String
+  idCurriculum String
+  curriculum   curriculum    @relation(fields: [idCurriculum], references: [id])
+  vacancy      selectProcess @relation(fields: [idVacancy], references: [id])
+
+  @@id([idCurriculum, idVacancy])
+}
+
+model shop {
+  id           String      @unique @default(uuid())
+  shopName     String
+  address      String
+  location     String
+  phone        String
+  whatsapp     String
+  main_point   Boolean
+  disabled_at  DateTime?
+  neighborhood locations[]
+}
+
+model locations {
+  id              String            @unique @default(uuid())
+  city            String
+  zip_code        String
+  state           String
+  neighborhood    String?
+  street          String?
+  idShop          String?
+  disabled_at     DateTime?
+  shop            shop?             @relation(fields: [idShop], references: [id])
+  plainsLocations plainsLocations[]
+}
+
+model plains {
+  id                 String            @unique @default(uuid())
+  visibleName        String
+  internalName       String
+  price              String
+  discountPrice      String?
+  idProfileBandwidth String
+  profileBandwidth   profileBandwidth  @relation(fields: [idProfileBandwidth], references: [id])
+  disabled_at        DateTime?
+  PlainsBenefits     plainsBenefits[]
+  plainsLocations    plainsLocations[]
+}
+
+model profileBandwidth {
+  id                String    @unique @default(uuid())
+  description       String
+  uploadBandwidth   String
+  downloadBandwidth String
+  disabled_at       DateTime?
+  plains            plains[]
+}
+
+model benefits {
+  id             String           @unique @default(uuid())
+  name           String
+  PlainsBenefits plainsBenefits[]
+}
+
+model plainsBenefits {
+  idPlains   String
+  idBenefits String
+  plain      plains   @relation(fields: [idPlains], references: [id])
+  benefits   benefits @relation(fields: [idBenefits], references: [id])
+
+  @@id([idBenefits, idPlains])
+}
+
+model plainsLocations {
+  idPlains    String
+  idLocations String
+  plain       plains    @relation(fields: [idPlains], references: [id])
+  locations   locations @relation(fields: [idLocations], references: [id])
+
+  @@id([idLocations, idPlains])
+}
