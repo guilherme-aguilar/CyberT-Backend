@@ -36,12 +36,18 @@ import { PrismaPlainRepository } from '@infra/repositories/prisma/prismaPlainRep
 import { Get_Plain } from '@useCases/plain/search.usecases';
 import { Create_Plain } from '@useCases/plain/create.usecases';
 import { Update_Plain } from '@useCases/plain/update.usecases';
-import { Disable_Plain } from '@useCases/plain/disable.usecases';
+import { Disable_Plain } from '@useCases/plain/delete.usecases';
 import { PrismaPlainsBenefitsRepository } from '@infra/repositories/prisma/prismaPlainsBenefitsRepository';
-import { Create_PlainsBenefits } from '@useCases/plain-benefit/create.usecases';
+
 import { SearchByPlain_PlainsBenefits } from '@useCases/plain-benefit/searchByPlain.usecases';
-import { Update_PlainsBenefits } from '@useCases/plain-benefit/update.usecases';
+
 import { ClearBenefitsByPlain_PlainsBenefits } from '@useCases/plain-benefit/ClearBenefitsByPlain.usecases';
+import { Update_PlainsBenefits } from '@useCases/plain-benefit/updateBenefitsByPlain.usecases';
+import { Get_PlainsLocationsByLocations } from '@useCases/plain-location/searchByLocation.usecases';
+import { PrismaPlainsLocationsRepository } from '@infra/repositories/prisma/prismaPlainsLocationsRepository';
+import { Update_PlainsLocations } from '@useCases/plain-location/UpdatePlainsByLocation.usecases';
+import { DeleteByLocations_PlainsLocations } from '@useCases/plain-location/ClearPlainsByLocation.usecases';
+import { GetByLocation_Plain } from '@useCases/plain/searchByLocation.usecases';
 
 @Module({
   imports: [
@@ -60,7 +66,7 @@ export class UsecasesProxyModule {
   static IS_AUTHENTICATED_USECASES_PROXY = 'IsAuthenticatedUseCasesProxy';
   static LOGOUT_USECASES_PROXY = 'LogoutUseCasesProxy';
 
-  // BandWidth 
+  // BandWidth
   static NEW_BANDWIDTH_PROFILE_USECASES_PROXY =
     'NewBandwidthProfileUseCasesProxy';
   static SEARCH_BANDWIDTH_PROFILE_USECASES_PROXY =
@@ -68,29 +74,36 @@ export class UsecasesProxyModule {
   static DISABLE_BANDWIDTH_PROFILE_USECASES_PROXY =
     'DisableBandwidthProfileUseCasesProxy';
 
-  // Benefit 
+  // Benefit
   static NEW_BENEFITS_USECASES_PROXY = 'NewBenefitsUseCasesProxy';
   static SEARCH_BENEFITS_USECASES_PROXY = 'SearchBenefitsUseCasesProxy';
 
-  // City 
+  // City
   static NEW_CITY_PROXY = 'NewCityUseCasesProxy';
   static SEARCH_CITY_PROXY = 'SearchCityUseCasesProxy';
   static UPDATE_CITY_PROXY = 'UpdateCityUseCasesProxy';
   static DISABLE_CITY_PROXY = 'DisableCityUseCasesProxy';
 
-  // Plain 
+  // Plain
   static NEW_PLAIN_PROXY = 'NewPlainUseCasesProxy';
   static SEARCH_PLAIN_PROXY = 'SearchPlainUseCasesProxy';
+  static SEARCH_PLAIN_BY_LOCATION_PROXY = 'SearchPlainByLocationUseCasesProxy';
   static UPDATE_PLAIN_PROXY = 'UpdatePlainUseCasesProxy';
   static DISABLE_PLAIN_PROXY = 'DisablePlainUseCasesProxy';
 
-
-  // PlainBenefit 
-  static NEW_PLAIN_BENEFIT_PROXY = 'NewPlainBenefitUseCasesProxy';
-  static SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY = 'SearchPlainBenefitByPlainUseCasesProxy';
+  // PlainBenefit
+  static SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY =
+    'SearchPlainBenefitByPlainUseCasesProxy';
   static UPDATE_PLAIN_BENEFIT_PROXY = 'UpdatePlainBenefitUseCasesProxy';
-  static DELETE_ALL_BENEFIT_BY_PLAIN_PROXY = 'DeleteAllBenefitByPlainUseCasesProxy';
+  static DELETE_ALL_BENEFIT_BY_PLAIN_PROXY =
+    'DeleteAllBenefitByPlainUseCasesProxy';
 
+  // PlainBenefit
+  static SEARCH_PLAIN_LOCATION_BY_LOCATION_PROXY =
+    'SearchPlainLocationByLocationUseCasesProxy';
+  static UPDATE_PLAIN_LOCATION_PROXY = 'UpdatePlainLocationUseCasesProxy';
+  static DELETE_ALL_PLAIN_BY_LOCATION_PROXY =
+    'DeleteAllPlainByLocationUseCasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -218,9 +231,7 @@ export class UsecasesProxyModule {
         {
           inject: [PrismaPlainRepository],
           provide: UsecasesProxyModule.NEW_PLAIN_PROXY,
-          useFactory: (
-            repository: PrismaPlainRepository,
-          ) =>
+          useFactory: (repository: PrismaPlainRepository) =>
             new UseCaseProxy(new Create_Plain(repository)),
         },
 
@@ -245,44 +256,85 @@ export class UsecasesProxyModule {
             new UseCaseProxy(new Disable_Plain(repository)),
         },
 
-        //Plain Benefits Acctions Crud start =======================================================
         {
-          inject: [PrismaPlainsBenefitsRepository],
-          provide: UsecasesProxyModule.NEW_PLAIN_BENEFIT_PROXY,
+          inject: [
+            PrismaPlainRepository,
+            PrismaPlainsLocationsRepository,
+            PrismaPlainsBenefitsRepository,
+            PrismaBenefitsRepository,
+          ],
+          provide: UsecasesProxyModule.SEARCH_PLAIN_BY_LOCATION_PROXY,
           useFactory: (
-            repository: PrismaPlainsBenefitsRepository,
+            PlainRepository: PrismaPlainRepository,
+            PlainLocationRepository: PrismaPlainsLocationsRepository,
+            PlainBenefitsRepository: PrismaPlainsBenefitsRepository,
+            BenefitsRepository: PrismaBenefitsRepository,
           ) =>
-            new UseCaseProxy(new Create_PlainsBenefits(repository)),
+            new UseCaseProxy(
+              new GetByLocation_Plain(
+                PlainRepository,
+                PlainLocationRepository,
+                PlainBenefitsRepository,
+                BenefitsRepository,
+              ),
+            ),
         },
 
+        //Plain Benefits Acctions Crud start =======================================================
         {
           inject: [PrismaPlainsBenefitsRepository, PrismaBenefitsRepository],
           provide: UsecasesProxyModule.SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY,
           useFactory: (
             repository: PrismaPlainsBenefitsRepository,
-            benefitsRep: PrismaBenefitsRepository
+            benefitsRep: PrismaBenefitsRepository,
           ) =>
-            new UseCaseProxy(new SearchByPlain_PlainsBenefits(repository, benefitsRep)),
+            new UseCaseProxy(
+              new SearchByPlain_PlainsBenefits(repository, benefitsRep),
+            ),
         },
 
         {
           inject: [PrismaPlainsBenefitsRepository],
           provide: UsecasesProxyModule.UPDATE_PLAIN_BENEFIT_PROXY,
-          useFactory: (
-            repository: PrismaPlainsBenefitsRepository,
-          ) =>
+          useFactory: (repository: PrismaPlainsBenefitsRepository) =>
             new UseCaseProxy(new Update_PlainsBenefits(repository)),
         },
 
         {
           inject: [PrismaPlainsBenefitsRepository],
           provide: UsecasesProxyModule.DELETE_ALL_BENEFIT_BY_PLAIN_PROXY,
-          useFactory: (
-            repository: PrismaPlainsBenefitsRepository,
-          ) =>
-            new UseCaseProxy(new ClearBenefitsByPlain_PlainsBenefits(repository)),
+          useFactory: (repository: PrismaPlainsBenefitsRepository) =>
+            new UseCaseProxy(
+              new ClearBenefitsByPlain_PlainsBenefits(repository),
+            ),
         },
 
+        //Plain Locations Acctions Crud start =======================================================
+        {
+          inject: [PrismaPlainsLocationsRepository, PrismaPlainRepository],
+          provide: UsecasesProxyModule.SEARCH_PLAIN_LOCATION_BY_LOCATION_PROXY,
+          useFactory: (
+            repository: PrismaPlainsLocationsRepository,
+            plainsRep: PrismaPlainRepository,
+          ) =>
+            new UseCaseProxy(
+              new Get_PlainsLocationsByLocations(repository, plainsRep),
+            ),
+        },
+
+        {
+          inject: [PrismaPlainsLocationsRepository],
+          provide: UsecasesProxyModule.UPDATE_PLAIN_LOCATION_PROXY,
+          useFactory: (repository: PrismaPlainsLocationsRepository) =>
+            new UseCaseProxy(new Update_PlainsLocations(repository)),
+        },
+
+        {
+          inject: [PrismaPlainsBenefitsRepository],
+          provide: UsecasesProxyModule.DELETE_ALL_PLAIN_BY_LOCATION_PROXY,
+          useFactory: (repository: PrismaPlainsLocationsRepository) =>
+            new UseCaseProxy(new DeleteByLocations_PlainsLocations(repository)),
+        },
       ],
       exports: [
         //Auth Export
@@ -310,13 +362,18 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.SEARCH_PLAIN_PROXY,
         UsecasesProxyModule.UPDATE_PLAIN_PROXY,
         UsecasesProxyModule.DISABLE_PLAIN_PROXY,
+        UsecasesProxyModule.SEARCH_PLAIN_BY_LOCATION_PROXY,
 
         //PlainBenefits Export
-        UsecasesProxyModule.NEW_PLAIN_BENEFIT_PROXY,
         UsecasesProxyModule.SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY,
         UsecasesProxyModule.UPDATE_PLAIN_BENEFIT_PROXY,
         UsecasesProxyModule.DELETE_ALL_BENEFIT_BY_PLAIN_PROXY,
-        // UsecasesProxyModule.DISABLE_PLAIN_BENEFIT_PROXY,
+
+        //PlainLocations Export
+        UsecasesProxyModule.SEARCH_PLAIN_LOCATION_BY_LOCATION_PROXY,
+        UsecasesProxyModule.UPDATE_PLAIN_LOCATION_PROXY,
+        UsecasesProxyModule.DELETE_ALL_PLAIN_BY_LOCATION_PROXY,
+
       ],
     };
   }

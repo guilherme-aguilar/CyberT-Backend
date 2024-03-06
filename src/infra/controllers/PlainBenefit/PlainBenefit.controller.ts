@@ -4,11 +4,7 @@ import {
   Delete,
   Get,
   Inject,
-  Param,
-  Patch,
-  Post,
-  Put,
-  Query,
+  Param, Put
 } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
@@ -16,16 +12,11 @@ import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { ApiResponseType } from '../../common/swagger/response.decorator';
 
 
-import { Create_Plain } from '@useCases/plain/create.usecases';
-import { Get_Plain } from '@useCases/plain/search.usecases';
-import { Update_Plain } from '@useCases/plain/update.usecases';
-import { Disable_Plain } from '@useCases/plain/disable.usecases';
 import { PlainBenefitByPlainPresenter, PlainBenefitPresenter } from './PlainBenefit.presenter';
 import { addPlainBeneiftDto } from './PlainBenefit.dto';
-import { Create_PlainsBenefits } from '@useCases/plain-benefit/create.usecases';
 import { SearchByPlain_PlainsBenefits } from '@useCases/plain-benefit/searchByPlain.usecases';
-import { Update_PlainsBenefits } from '@useCases/plain-benefit/update.usecases';
 import { ClearBenefitsByPlain_PlainsBenefits } from '@useCases/plain-benefit/ClearBenefitsByPlain.usecases';
+import { Update_PlainsBenefits } from '@useCases/plain-benefit/updateBenefitsByPlain.usecases';
 
 
 @Controller('PlainBenefit')
@@ -34,9 +25,9 @@ import { ClearBenefitsByPlain_PlainsBenefits } from '@useCases/plain-benefit/Cle
 @ApiExtraModels(PlainBenefitPresenter)
 export class PlainBenefitController {
   constructor(
-    //New 
-    @Inject(UsecasesProxyModule.NEW_PLAIN_BENEFIT_PROXY)
-    private readonly create: UseCaseProxy<Create_PlainsBenefits>,
+    // //New 
+    // @Inject(UsecasesProxyModule.NEW_PLAIN_BENEFIT_PROXY)
+    // private readonly create: UseCaseProxy<Create_PlainsBenefits>,
 
     //Get by Plain
     @Inject(UsecasesProxyModule.SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY)
@@ -47,17 +38,17 @@ export class PlainBenefitController {
     private readonly updateMany: UseCaseProxy<Update_PlainsBenefits>,
 
     //DELETE 
-    @Inject(UsecasesProxyModule.DISABLE_PLAIN_PROXY)
+    @Inject(UsecasesProxyModule.DELETE_ALL_BENEFIT_BY_PLAIN_PROXY)
     private readonly DeleteAllBenefits: UseCaseProxy<ClearBenefitsByPlain_PlainsBenefits>,
   ) {}
 
-  @Post('')
-  @ApiResponseType(PlainBenefitPresenter, true)
-  async New(@Body() dto: addPlainBeneiftDto) {
-    const ReceivedUseCase = await this.create.getInstance().execute(dto);
+  // @Post('')
+  // @ApiResponseType(PlainBenefitPresenter, true)
+  // async New(@Body() dto: addPlainBeneiftDto) {
+  //   const ReceivedUseCase = await this.create.getInstance().execute(dto);
 
-    return new PlainBenefitPresenter(ReceivedUseCase.data);
-  }
+  //   return new PlainBenefitPresenter(ReceivedUseCase.data);
+  // }
 
   @Get('/byPlain/:id') // Defina a rota com um parâmetro chamado 'id'
   @ApiResponseType(PlainBenefitByPlainPresenter, true)

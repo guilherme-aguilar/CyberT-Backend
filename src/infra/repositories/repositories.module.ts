@@ -7,6 +7,7 @@ import { PrismaBenefitsRepository } from './prisma/prismaBenefitsRepository';
 import { PrismaCityRepository } from './prisma/prismaCityRepository';
 import { PrismaPlainRepository } from './prisma/prismaPlainRepository';
 import { PrismaPlainsBenefitsRepository } from './prisma/prismaPlainsBenefitsRepository';
+import { PrismaPlainsLocationsRepository } from './prisma/prismaPlainsLocationsRepository';
 
 @Module({
   imports: [PrismaModule],
@@ -18,6 +19,7 @@ import { PrismaPlainsBenefitsRepository } from './prisma/prismaPlainsBenefitsRep
     
     PrismaPlainRepository,
     PrismaPlainsBenefitsRepository,
+    PrismaPlainsLocationsRepository
   ],
   exports: [
     DatabaseUserRepository,
@@ -27,7 +29,8 @@ import { PrismaPlainsBenefitsRepository } from './prisma/prismaPlainsBenefitsRep
 
     PrismaPlainRepository,
 
-    PrismaPlainsBenefitsRepository
+    PrismaPlainsBenefitsRepository,
+    PrismaPlainsLocationsRepository
   ],
 })
 export class RepositoriesModule {}

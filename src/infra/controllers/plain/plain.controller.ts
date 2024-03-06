@@ -15,13 +15,14 @@ import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { ApiResponseType } from '../../common/swagger/response.decorator';
 
 import { addPlainDto, searchPlainDto, updatePlainDto } from './plain.dto';
-import { PlainPresenter } from './plain.presenter';
+import { PlainByLocationPresenter, PlainPresenter } from './plain.presenter';
 
 
 import { Create_Plain } from '@useCases/plain/create.usecases';
 import { Get_Plain } from '@useCases/plain/search.usecases';
 import { Update_Plain } from '@useCases/plain/update.usecases';
-import { Disable_Plain } from '@useCases/plain/disable.usecases';
+import { Disable_Plain } from '@useCases/plain/delete.usecases';
+import { GetByLocation_Plain } from '@useCases/plain/searchByLocation.usecases';
 
 
 @Controller('Plain')
@@ -37,6 +38,10 @@ export class PlainController {
     //Get 
     @Inject(UsecasesProxyModule.SEARCH_PLAIN_PROXY)
     private readonly search: UseCaseProxy<Get_Plain>,
+
+    //Get 
+    @Inject(UsecasesProxyModule.SEARCH_PLAIN_BY_LOCATION_PROXY)
+    private readonly searchByLocation: UseCaseProxy<GetByLocation_Plain>,
 
     //Update 
     @Inject(UsecasesProxyModule.UPDATE_PLAIN_PROXY)
@@ -75,8 +80,18 @@ export class PlainController {
     return ReceivedUseCase.data.map((item) => new PlainPresenter(item));
   }
 
+  @Get('/byLocation/:id')
+  @ApiResponseType(PlainPresenter, true)
+  async SearchByLocation(@Param('id') idLocations: string) {
+
+    const {data} = await this.searchByLocation.getInstance().execute({idLocations});
+
+    return data.map((item) => new PlainByLocationPresenter(item));
+  }
+
   @Put('/:id')
-  async Update(@Param('id') id: string, @Body() body: updatePlainDto) {
+  @ApiResponseType(PlainPresenter, true)
+  async Update(@Body() body: updatePlainDto, @Param('id') id: string, ) {
 
 
     console.log(body);

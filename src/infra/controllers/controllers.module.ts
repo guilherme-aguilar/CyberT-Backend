@@ -8,6 +8,7 @@ import { BenefitController } from './benefit/benefit.controller';
 import { CityController } from './city/city.controller';
 import { PlainController } from './plain/plain.controller';
 import { PlainBenefitController } from './PlainBenefit/PlainBenefit.controller';
+import { PlainLocationController } from './PlainLocation/PlainLocation.controller';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { PlainBenefitController } from './PlainBenefit/PlainBenefit.controller';
     BenefitController,
     CityController,
     PlainController,
-    PlainBenefitController
+    PlainBenefitController,
+    PlainLocationController
   ],
 })
 export class ControllersModule {}
