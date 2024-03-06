@@ -6,6 +6,7 @@ import { UsecasesProxyModule } from 'src/infra/usecases-proxy/usecases-proxy.mod
 import { BandwidthProfileController } from './bandwidthProfile/bandwidthProfile.controller';
 import { BenefitController } from './benefit/benefit.controller';
 import { CityController } from './city/city.controller';
+import { PlainController } from './plain/plain.controller';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { CityController } from './city/city.controller';
     AuthController, 
     BandwidthProfileController,
     BenefitController,
-    CityController
+    CityController,
+    PlainController,
   ],
 })
 export class ControllersModule {}
