@@ -7,13 +7,14 @@ import {
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
 import { ApiResponseType } from '../../common/swagger/response.decorator';
 
-import { addPlainDto, updatePlainDto } from './plain.dto';
+import { addPlainDto, searchPlainDto, updatePlainDto } from './plain.dto';
 import { PlainPresenter } from './plain.presenter';
 
 
@@ -56,8 +57,16 @@ export class PlainController {
 
   @Get('')
   @ApiResponseType(PlainPresenter, true)
-  async Search() {
-    const ReceivedUseCase = await this.search.getInstance().execute();
+  async Search(@Query() dto: searchPlainDto) {
+
+    let isActive = undefined
+
+    if(typeof dto.isActive === "string") {
+      console.log
+       isActive = JSON.parse(dto.isActive)
+    }
+
+    const ReceivedUseCase = await this.search.getInstance().execute({isActive});
 
     return ReceivedUseCase.data.map((item) => new PlainPresenter(item));
   }

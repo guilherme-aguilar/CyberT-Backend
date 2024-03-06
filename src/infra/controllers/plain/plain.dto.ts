@@ -25,6 +25,12 @@ export class addPlainDto {
   idProfileBandwidth: string;
 }
 
+export class searchPlainDto {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  isActive : string;
+}
+
 export class updatePlainDto {
   @IsOptional()
   visibleName: string;
