@@ -37,6 +37,11 @@ import { Get_Plain } from '@useCases/plain/search.usecases';
 import { Create_Plain } from '@useCases/plain/create.usecases';
 import { Update_Plain } from '@useCases/plain/update.usecases';
 import { Disable_Plain } from '@useCases/plain/disable.usecases';
+import { PrismaPlainsBenefitsRepository } from '@infra/repositories/prisma/prismaPlainsBenefitsRepository';
+import { Create_PlainsBenefits } from '@useCases/plain-benefit/create.usecases';
+import { SearchByPlain_PlainsBenefits } from '@useCases/plain-benefit/searchByPlain.usecases';
+import { Update_PlainsBenefits } from '@useCases/plain-benefit/update.usecases';
+import { ClearBenefitsByPlain_PlainsBenefits } from '@useCases/plain-benefit/ClearBenefitsByPlain.usecases';
 
 @Module({
   imports: [
@@ -55,7 +60,7 @@ export class UsecasesProxyModule {
   static IS_AUTHENTICATED_USECASES_PROXY = 'IsAuthenticatedUseCasesProxy';
   static LOGOUT_USECASES_PROXY = 'LogoutUseCasesProxy';
 
-  // BandWidth Profile
+  // BandWidth 
   static NEW_BANDWIDTH_PROFILE_USECASES_PROXY =
     'NewBandwidthProfileUseCasesProxy';
   static SEARCH_BANDWIDTH_PROFILE_USECASES_PROXY =
@@ -63,21 +68,29 @@ export class UsecasesProxyModule {
   static DISABLE_BANDWIDTH_PROFILE_USECASES_PROXY =
     'DisableBandwidthProfileUseCasesProxy';
 
-  // Benefit Profile
+  // Benefit 
   static NEW_BENEFITS_USECASES_PROXY = 'NewBenefitsUseCasesProxy';
   static SEARCH_BENEFITS_USECASES_PROXY = 'SearchBenefitsUseCasesProxy';
 
-  // City Profile
+  // City 
   static NEW_CITY_PROXY = 'NewCityUseCasesProxy';
   static SEARCH_CITY_PROXY = 'SearchCityUseCasesProxy';
   static UPDATE_CITY_PROXY = 'UpdateCityUseCasesProxy';
   static DISABLE_CITY_PROXY = 'DisableCityUseCasesProxy';
 
-  // Plain Profile
+  // Plain 
   static NEW_PLAIN_PROXY = 'NewPlainUseCasesProxy';
   static SEARCH_PLAIN_PROXY = 'SearchPlainUseCasesProxy';
   static UPDATE_PLAIN_PROXY = 'UpdatePlainUseCasesProxy';
   static DISABLE_PLAIN_PROXY = 'DisablePlainUseCasesProxy';
+
+
+  // PlainBenefit 
+  static NEW_PLAIN_BENEFIT_PROXY = 'NewPlainBenefitUseCasesProxy';
+  static SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY = 'SearchPlainBenefitByPlainUseCasesProxy';
+  static UPDATE_PLAIN_BENEFIT_PROXY = 'UpdatePlainBenefitUseCasesProxy';
+  static DELETE_ALL_BENEFIT_BY_PLAIN_PROXY = 'DeleteAllBenefitByPlainUseCasesProxy';
+
 
   static register(): DynamicModule {
     return {
@@ -231,6 +244,45 @@ export class UsecasesProxyModule {
           useFactory: (repository: PrismaPlainRepository) =>
             new UseCaseProxy(new Disable_Plain(repository)),
         },
+
+        //Plain Benefits Acctions Crud start =======================================================
+        {
+          inject: [PrismaPlainsBenefitsRepository],
+          provide: UsecasesProxyModule.NEW_PLAIN_BENEFIT_PROXY,
+          useFactory: (
+            repository: PrismaPlainsBenefitsRepository,
+          ) =>
+            new UseCaseProxy(new Create_PlainsBenefits(repository)),
+        },
+
+        {
+          inject: [PrismaPlainsBenefitsRepository, PrismaBenefitsRepository],
+          provide: UsecasesProxyModule.SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY,
+          useFactory: (
+            repository: PrismaPlainsBenefitsRepository,
+            benefitsRep: PrismaBenefitsRepository
+          ) =>
+            new UseCaseProxy(new SearchByPlain_PlainsBenefits(repository, benefitsRep)),
+        },
+
+        {
+          inject: [PrismaPlainsBenefitsRepository],
+          provide: UsecasesProxyModule.UPDATE_PLAIN_BENEFIT_PROXY,
+          useFactory: (
+            repository: PrismaPlainsBenefitsRepository,
+          ) =>
+            new UseCaseProxy(new Update_PlainsBenefits(repository)),
+        },
+
+        {
+          inject: [PrismaPlainsBenefitsRepository],
+          provide: UsecasesProxyModule.DELETE_ALL_BENEFIT_BY_PLAIN_PROXY,
+          useFactory: (
+            repository: PrismaPlainsBenefitsRepository,
+          ) =>
+            new UseCaseProxy(new ClearBenefitsByPlain_PlainsBenefits(repository)),
+        },
+
       ],
       exports: [
         //Auth Export
@@ -258,6 +310,13 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.SEARCH_PLAIN_PROXY,
         UsecasesProxyModule.UPDATE_PLAIN_PROXY,
         UsecasesProxyModule.DISABLE_PLAIN_PROXY,
+
+        //PlainBenefits Export
+        UsecasesProxyModule.NEW_PLAIN_BENEFIT_PROXY,
+        UsecasesProxyModule.SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY,
+        UsecasesProxyModule.UPDATE_PLAIN_BENEFIT_PROXY,
+        UsecasesProxyModule.DELETE_ALL_BENEFIT_BY_PLAIN_PROXY,
+        // UsecasesProxyModule.DISABLE_PLAIN_BENEFIT_PROXY,
       ],
     };
   }

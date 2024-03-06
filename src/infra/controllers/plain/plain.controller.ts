@@ -61,7 +61,7 @@ export class PlainController {
 
     let isActive = undefined
 
-    if (dto.isActive !== 'true' && dto.isActive !== 'false') {
+    if (dto.isActive !== 'true' && dto.isActive !== 'false' && dto.isActive !== undefined) {
       throw new Error('isActive must be string equal true or false');
     }
 

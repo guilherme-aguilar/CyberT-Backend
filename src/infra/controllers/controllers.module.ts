@@ -7,6 +7,7 @@ import { BandwidthProfileController } from './bandwidthProfile/bandwidthProfile.
 import { BenefitController } from './benefit/benefit.controller';
 import { CityController } from './city/city.controller';
 import { PlainController } from './plain/plain.controller';
+import { PlainBenefitController } from './PlainBenefit/PlainBenefit.controller';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PlainController } from './plain/plain.controller';
     BenefitController,
     CityController,
     PlainController,
+    PlainBenefitController
   ],
 })
 export class ControllersModule {}

@@ -6,6 +6,7 @@ import { PrismaBandwidthProfileRepository } from './prisma/prismaBandwidthProfil
 import { PrismaBenefitsRepository } from './prisma/prismaBenefitsRepository';
 import { PrismaCityRepository } from './prisma/prismaCityRepository';
 import { PrismaPlainRepository } from './prisma/prismaPlainRepository';
+import { PrismaPlainsBenefitsRepository } from './prisma/prismaPlainsBenefitsRepository';
 
 @Module({
   imports: [PrismaModule],
@@ -16,6 +17,7 @@ import { PrismaPlainRepository } from './prisma/prismaPlainRepository';
     PrismaCityRepository,
     
     PrismaPlainRepository,
+    PrismaPlainsBenefitsRepository,
   ],
   exports: [
     DatabaseUserRepository,
@@ -24,6 +26,8 @@ import { PrismaPlainRepository } from './prisma/prismaPlainRepository';
     PrismaCityRepository,
 
     PrismaPlainRepository,
+
+    PrismaPlainsBenefitsRepository
   ],
 })
 export class RepositoriesModule {}
