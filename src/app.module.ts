@@ -16,6 +16,7 @@ import { JwtRefreshTokenStrategy } from './infra/common/strategies/jwtRefresh.st
 import { UsecasesProxyModule } from './infra/usecases-proxy/usecases-proxy.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './infra/common/guards/jwtAuth.guard';
+import { BrasilApiModule } from '@infra/services/brasil-api/brasil-api.module';
 @Module({
   imports: [
     PassportModule,
@@ -29,6 +30,7 @@ import { JwtAuthGuard } from './infra/common/guards/jwtAuth.guard';
     BcryptModule,
     JwtServiceModule,
     EnvironmentConfigModule,
+    BrasilApiModule,
   ],
   providers: [LocalStrategy, JwtStrategy, JwtRefreshTokenStrategy, {
     provide: APP_GUARD,

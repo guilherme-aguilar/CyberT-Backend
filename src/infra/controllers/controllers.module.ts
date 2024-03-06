@@ -4,7 +4,8 @@ import { AuthController } from './auth/auth.controller';
 
 import { UsecasesProxyModule } from 'src/infra/usecases-proxy/usecases-proxy.module';
 import { BandwidthProfileController } from './bandwidthProfile/bandwidthProfile.controller';
-import { BenefitController } from './benefits/benefits.controller';
+import { BenefitController } from './benefit/benefit.controller';
+import { CityController } from './city/city.controller';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { BenefitController } from './benefits/benefits.controller';
   controllers: [
     AuthController, 
     BandwidthProfileController,
-    BenefitController
+    BenefitController,
+    CityController
   ],
 })
 export class ControllersModule {}

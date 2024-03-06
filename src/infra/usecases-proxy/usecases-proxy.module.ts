@@ -25,9 +25,15 @@ import { Disable_BandwidthProfile } from '@useCases/bandwidth-profile/disabled.u
 import { Create_Benefits } from '@useCases/benefits/create.usecases';
 import { PrismaBenefitsRepository } from '@infra/repositories/prisma/prismaBenefitsRepository';
 import { Get_Benefits } from '@useCases/benefits/search.usecases';
+import { PrismaCityRepository } from '@infra/repositories/prisma/prismaCityRepository';
+import { Create_City } from '@useCases/city/create.usecases';
+import { Get_City } from '@useCases/city/search.usecases';
+import { BrasilApiService } from '@infra/services/brasil-api/brasil-api.service';
+import { BrasilApiModule } from '@infra/services/brasil-api/brasil-api.module';
+import { Update_City } from '@useCases/city/update.usecases';
 
 @Module({
-  imports: [LoggerModule, JwtModule, BcryptModule, EnvironmentConfigModule, RepositoriesModule, ExceptionsModule],
+  imports: [LoggerModule, JwtModule, BcryptModule, EnvironmentConfigModule, RepositoriesModule, ExceptionsModule, BrasilApiModule,],
 })
 export class UsecasesProxyModule {
   // Auth
@@ -45,6 +51,11 @@ export class UsecasesProxyModule {
   static NEW_BENEFITS_USECASES_PROXY = "NewBenefitsUseCasesProxy"
   static SEARCH_BENEFITS_USECASES_PROXY = "SearchBenefitsUseCasesProxy"
 
+  // BandWidth Profile
+  static NEW_CITY_PROXY = "NewCityUseCasesProxy"
+  static SEARCH_CITY_PROXY = "SearchCityUseCasesProxy"
+  static UPDATE_CITY_PROXY = "UpdateCityUseCasesProxy"
+
 
 
   static register(): DynamicModule {
@@ -57,13 +68,7 @@ export class UsecasesProxyModule {
             JwtTokenService,
             EnvironmentConfigService,
             DatabaseUserRepository,
-            BcryptService,
-
-            
-            PrismaBandwidthProfileRepository,
-
-            PrismaBenefitsRepository,
-            
+            BcryptService,   
           ],
           provide: UsecasesProxyModule.LOGIN_USECASES_PROXY,
           useFactory: (
@@ -129,6 +134,28 @@ export class UsecasesProxyModule {
           useFactory: (BenefitsRepository: PrismaBenefitsRepository) => 
           new UseCaseProxy(new Get_Benefits(BenefitsRepository)),
         },
+
+        //City Acctions Crud start =======================================================
+        {
+          inject: [PrismaCityRepository, BrasilApiService],
+          provide: UsecasesProxyModule.NEW_CITY_PROXY,
+          useFactory: (CityRepository: PrismaCityRepository, brasilApiService : BrasilApiService) => 
+          new UseCaseProxy(new Create_City(CityRepository, brasilApiService)),
+        },
+
+        {
+          inject: [PrismaCityRepository],
+          provide: UsecasesProxyModule.SEARCH_CITY_PROXY,
+          useFactory: (CityRepository: PrismaCityRepository) => 
+          new UseCaseProxy(new Get_City(CityRepository)),
+        },
+
+        {
+          inject: [PrismaCityRepository],
+          provide: UsecasesProxyModule.UPDATE_CITY_PROXY,
+          useFactory: (CityRepository: PrismaCityRepository) => 
+          new UseCaseProxy(new Update_City(CityRepository)),
+        },
       ],
       exports: [
 
@@ -145,6 +172,11 @@ export class UsecasesProxyModule {
         //Benefits Export
         UsecasesProxyModule.NEW_BENEFITS_USECASES_PROXY,
         UsecasesProxyModule.SEARCH_BENEFITS_USECASES_PROXY,
+
+         //Benefits Export
+         UsecasesProxyModule.NEW_CITY_PROXY,
+         UsecasesProxyModule.SEARCH_CITY_PROXY,
+         UsecasesProxyModule.UPDATE_CITY_PROXY,
 
 
       ],

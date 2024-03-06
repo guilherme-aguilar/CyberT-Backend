@@ -3,8 +3,8 @@ import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
 import { ApiResponseType } from '../../common/swagger/response.decorator';
-import { BenefitPresenter } from './benefits.presenter';
-import { addBenefitDto } from './benefits.dto';
+import { BenefitPresenter } from './benefit.presenter';
+import { addBenefitDto } from './benefit.dto';
 import { Create_Benefits } from '@useCases/benefits/create.usecases';
 import { Get_Benefits } from '@useCases/benefits/search.usecases';
 
