@@ -21,3 +21,10 @@ export class updateCityDto {
   idShop: string;
 }
 
+export class searchCityDto {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  isActive : string;
+}
+
+

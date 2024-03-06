@@ -15,6 +15,6 @@ export class addBandwidthProfileDto {
 export class searchBandwidthProfileDto {
   @ApiProperty({ required: false })
   @IsOptional()
-  isActive : boolean;
+  isActive : string;
 }
 

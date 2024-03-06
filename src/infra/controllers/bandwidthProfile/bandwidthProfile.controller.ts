@@ -44,7 +44,18 @@ export class BandwidthProfileController {
   @ApiResponseType(BandwidthProfilePresenter, true)
   async Search(@Query() dto: searchBandwidthProfileDto) {
 
-    const ReceivedUseCase = await this.SearchBandwidthProfileUseCasesProxy.getInstance().execute(dto);
+    let isActive = undefined
+
+    if (dto.isActive !== 'true' && dto.isActive !== 'false') {
+      throw new Error('isActive must be string equal true or false');
+    }
+
+    if(typeof dto.isActive === "string") {
+      console.log
+       isActive = JSON.parse(dto.isActive)
+    }
+
+    const ReceivedUseCase = await this.SearchBandwidthProfileUseCasesProxy.getInstance().execute({isActive});
 
     return ReceivedUseCase.data.map(item => new BandwidthProfilePresenter(item));
   }

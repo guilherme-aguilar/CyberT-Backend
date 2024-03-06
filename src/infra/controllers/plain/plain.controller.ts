@@ -61,6 +61,10 @@ export class PlainController {
 
     let isActive = undefined
 
+    if (dto.isActive !== 'true' && dto.isActive !== 'false') {
+      throw new Error('isActive must be string equal true or false');
+    }
+
     if(typeof dto.isActive === "string") {
       console.log
        isActive = JSON.parse(dto.isActive)

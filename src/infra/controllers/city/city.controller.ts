@@ -7,13 +7,14 @@ import {
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
 import { ApiResponseType } from '../../common/swagger/response.decorator';
 
-import { addCityDto, updateCityDto } from './city.dto';
+import { addCityDto, searchCityDto, updateCityDto } from './city.dto';
 import { CityPresenter } from './city.presenter';
 import { Create_City } from '@useCases/city/create.usecases';
 import { Get_City } from '@useCases/city/search.usecases';
@@ -53,8 +54,20 @@ export class CityController {
 
   @Get('')
   @ApiResponseType(CityPresenter, true)
-  async Search() {
-    const ReceivedUseCase = await this.search.getInstance().execute();
+  async Search(@Query() dto: searchCityDto) {
+
+    let isActive = undefined
+
+    if (dto.isActive !== 'true' && dto.isActive !== 'false') {
+      throw new Error('isActive must be string equal true or false');
+    }
+
+    if(typeof dto.isActive === "string") {
+      console.log
+       isActive = JSON.parse(dto.isActive)
+    }
+
+    const ReceivedUseCase = await this.search.getInstance().execute({isActive});
 
     return ReceivedUseCase.data.map((item) => new CityPresenter(item));
   }
