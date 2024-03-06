@@ -31,6 +31,7 @@ import { Get_City } from '@useCases/city/search.usecases';
 import { BrasilApiService } from '@infra/services/brasil-api/brasil-api.service';
 import { BrasilApiModule } from '@infra/services/brasil-api/brasil-api.module';
 import { Update_City } from '@useCases/city/update.usecases';
+import { Disable_City } from '@useCases/city/disable.usecases';
 
 @Module({
   imports: [LoggerModule, JwtModule, BcryptModule, EnvironmentConfigModule, RepositoriesModule, ExceptionsModule, BrasilApiModule,],
@@ -55,7 +56,7 @@ export class UsecasesProxyModule {
   static NEW_CITY_PROXY = "NewCityUseCasesProxy"
   static SEARCH_CITY_PROXY = "SearchCityUseCasesProxy"
   static UPDATE_CITY_PROXY = "UpdateCityUseCasesProxy"
-
+  static DISABLE_CITY_PROXY = "DisableCityUseCasesProxy"
 
 
   static register(): DynamicModule {
@@ -156,6 +157,13 @@ export class UsecasesProxyModule {
           useFactory: (CityRepository: PrismaCityRepository) => 
           new UseCaseProxy(new Update_City(CityRepository)),
         },
+
+        {
+          inject: [PrismaCityRepository],
+          provide: UsecasesProxyModule.DISABLE_CITY_PROXY,
+          useFactory: (CityRepository: PrismaCityRepository) => 
+          new UseCaseProxy(new Disable_City(CityRepository)),
+        },
       ],
       exports: [
 
@@ -173,12 +181,11 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.NEW_BENEFITS_USECASES_PROXY,
         UsecasesProxyModule.SEARCH_BENEFITS_USECASES_PROXY,
 
-         //Benefits Export
-         UsecasesProxyModule.NEW_CITY_PROXY,
-         UsecasesProxyModule.SEARCH_CITY_PROXY,
-         UsecasesProxyModule.UPDATE_CITY_PROXY,
-
-
+        //City Export
+        UsecasesProxyModule.NEW_CITY_PROXY,
+        UsecasesProxyModule.SEARCH_CITY_PROXY,
+        UsecasesProxyModule.UPDATE_CITY_PROXY,
+        UsecasesProxyModule.DISABLE_CITY_PROXY,
       ],
     };
   }

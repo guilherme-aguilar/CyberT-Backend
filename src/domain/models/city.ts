@@ -7,7 +7,7 @@ interface CityProps {
   neighborhood?: string;
   street?: string;
   idShop?: string;
-  disabled_at?: Date
+  disabled_at?: Date;
 }
 
 export class City {
@@ -85,7 +85,11 @@ export class City {
     return this.props.disabled_at;
   }
 
-  public set disabled_at(value: Date | null) {
-    this.props.disabled_at = value;
+  disabled(): void {
+    if (this.props.disabled_at instanceof Date) {
+      this.props.disabled_at = null;
+    } else {
+      this.props.disabled_at = new Date();
+    }
   }
 }

@@ -4,6 +4,7 @@ import {
   Get,
   Inject,
   Param,
+  Patch,
   Post,
   Put,
 } from '@nestjs/common';
@@ -17,6 +18,7 @@ import { CityPresenter } from './city.presenter';
 import { Create_City } from '@useCases/city/create.usecases';
 import { Get_City } from '@useCases/city/search.usecases';
 import { Update_City } from '@useCases/city/update.usecases';
+import { Disable_City } from '@useCases/city/disable.usecases';
 
 @Controller('City')
 @ApiTags('City')
@@ -24,17 +26,21 @@ import { Update_City } from '@useCases/city/update.usecases';
 @ApiExtraModels(CityPresenter)
 export class CityController {
   constructor(
-    //New BandWidthProfile
+    //New 
     @Inject(UsecasesProxyModule.NEW_CITY_PROXY)
     private readonly create: UseCaseProxy<Create_City>,
 
-    //Get BandWidthProfile
+    //Get 
     @Inject(UsecasesProxyModule.SEARCH_CITY_PROXY)
     private readonly search: UseCaseProxy<Get_City>,
 
-    //Get BandWidthProfile
+    //Update 
     @Inject(UsecasesProxyModule.UPDATE_CITY_PROXY)
     private readonly update: UseCaseProxy<Update_City>,
+
+    //Disable 
+    @Inject(UsecasesProxyModule.DISABLE_CITY_PROXY)
+    private readonly disable: UseCaseProxy<Disable_City>,
   ) {}
 
   @Post('')
@@ -63,6 +69,16 @@ export class CityController {
     };
 
     const { data } = await this.update.getInstance().execute(awaitBody);
+
+    return new CityPresenter(data);
+  }
+
+  @Patch('/disable/:id')
+  async Disable(@Param('id') id: string) {
+
+    const { data } = await this.disable.getInstance().execute({
+      id
+    });
 
     return new CityPresenter(data);
   }
