@@ -21,6 +21,13 @@ async function bootstrap() {
   // pipes
   app.useGlobalPipes(new ValidationPipe());
 
+  app.enableCors({
+    origin: 'http://localhost:3333',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authentication', 'Set-Cookie'],
+    credentials: true,
+  });
+
   // interceptors
   app.useGlobalInterceptors(new LoggingInterceptor(new LoggerService()));
   app.useGlobalInterceptors(new ResponseInterceptor());
@@ -34,7 +41,7 @@ async function bootstrap() {
   // swagger config
   if (env !== 'production') {
     const config = new DocumentBuilder()
-      .addBearerAuth()
+      .addCookieAuth()
       .setTitle('Clean Architecture Nestjs')
       .setDescription('Example with todo list')
       .setVersion('1.0')

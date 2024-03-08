@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 
-
 import { JwtModule } from '@nestjs/jwt';
 import { LoggerModule } from './infra/logger/logger.module';
 import { ExceptionsModule } from './infra/exceptions/exceptions.module';
@@ -32,10 +31,14 @@ import { BrasilApiModule } from '@infra/services/brasil-api/brasil-api.module';
     EnvironmentConfigModule,
     BrasilApiModule,
   ],
-  providers: [LocalStrategy, JwtStrategy, JwtRefreshTokenStrategy, {
-    provide: APP_GUARD,
-    useClass: JwtAuthGuard
-  }],
+  providers: [
+    LocalStrategy,
+    JwtStrategy,
+    JwtRefreshTokenStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
-
