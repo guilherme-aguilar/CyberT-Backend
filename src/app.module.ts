@@ -21,6 +21,7 @@ import { BrasilApiModule } from '@infra/services/brasil-api/brasil-api.module';
     PassportModule,
     JwtModule.register({
       secret: process.env.secret,
+      signOptions: { expiresIn: '24h' },
     }),
     LoggerModule,
     ExceptionsModule,

@@ -75,9 +75,15 @@ export class Shop {
       this.props.main_point = value
     }
 
-    public get disabled_at(): Date | null | undefined{
+ 
+    public get disabled_at(): null | Date {
       return this.props.disabled_at;
     }
+  
+    public set disabled_at(value: null | Date) {
+      this.props.disabled_at = value;
+    }
+    
   
     public disabled() {
       this.props.disabled_at = new Date();

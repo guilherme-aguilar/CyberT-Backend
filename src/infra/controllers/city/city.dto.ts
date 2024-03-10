@@ -17,7 +17,6 @@ export class updateCityDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsZipCodeValid()
   idShop: string;
 }
 

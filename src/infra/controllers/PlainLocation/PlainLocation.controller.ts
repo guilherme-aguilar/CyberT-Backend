@@ -40,7 +40,7 @@ export class PlainLocationController {
 
     //DELETE 
     @Inject(UsecasesProxyModule.DELETE_ALL_PLAIN_BY_LOCATION_PROXY)
-    private readonly DeleteAllBenefits: UseCaseProxy<DeleteByLocations_PlainsLocations>,
+    private readonly deleteAllPlains: UseCaseProxy<DeleteByLocations_PlainsLocations>,
   ) {}
 
   // @Post('')
@@ -68,6 +68,8 @@ export class PlainLocationController {
   @Put()
   @ApiResponseType(PlainLocationPresenter, true)
   async update(@Body() body: addPlainLocationDto[]) {
+
+    console.log("body received: ", body)
     
     const { data } = await this.updateMany.getInstance().execute(body);
 
@@ -77,7 +79,7 @@ export class PlainLocationController {
   @Delete(":id")
   async delete(@Param('id') id: string) {
     
-    await this.DeleteAllBenefits.getInstance().execute({idLocations : id});
+    await this.deleteAllPlains.getInstance().execute({idLocations : id});
 
   }
 }

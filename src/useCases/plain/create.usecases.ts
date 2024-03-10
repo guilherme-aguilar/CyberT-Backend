@@ -22,7 +22,7 @@ export class Create_Plain {
     const { visibleName, internalName, price, discountPrice, idProfileBandwidth } = req;
 
     const data = new Plain({
-      visibleName, internalName, price, discountPrice, idProfileBandwidth
+      visibleName, internalName, price, discountPrice, idProfileBandwidth 
     });
 
     await this.repository.create(data);

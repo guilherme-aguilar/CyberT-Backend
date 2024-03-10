@@ -26,6 +26,8 @@ export class PrismaPlainsLocationsRepository
   }
 
   async deleteAllByLocation(id: string): Promise<void> {
+
+    console.log(id)
     await this.prismaService.plainsLocations.deleteMany({
       where: { idLocations: id },
     });

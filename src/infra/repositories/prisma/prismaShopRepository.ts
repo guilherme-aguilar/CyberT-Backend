@@ -10,6 +10,7 @@ export class PrismaShopRepository implements ShopRepository {
   async create(request: Shop): Promise<void> {
     const row = PrismaShopMapper.toPrisma(request);
 
+    console.log(row)
     await this.prismaService.shop.create({
       data: row,
     });

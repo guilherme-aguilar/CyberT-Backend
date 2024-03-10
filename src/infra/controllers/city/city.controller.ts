@@ -20,6 +20,7 @@ import { Create_City } from '@useCases/city/create.usecases';
 import { Get_City } from '@useCases/city/search.usecases';
 import { Update_City } from '@useCases/city/update.usecases';
 import { Disable_City } from '@useCases/city/disable.usecases';
+import { IsPublic } from '@infra/common/decorators/is-public.decorator';
 
 @Controller('City')
 @ApiTags('City')
@@ -53,6 +54,7 @@ export class CityController {
   }
 
   @Get('')
+  @IsPublic()
   @ApiResponseType(CityPresenter, true)
   async Search(@Query() dto: searchCityDto) {
 
@@ -72,7 +74,7 @@ export class CityController {
     return ReceivedUseCase.data.map((item) => new CityPresenter(item));
   }
 
-  @Put('/:id')
+  @Put(':id')
   async Update(@Param('id') id: string, @Body() body: updateCityDto) {
     const { idShop } = body;
 
@@ -80,6 +82,9 @@ export class CityController {
       id: id, // Use o 'id' obtido dos parâmetros
       idShop,
     };
+
+
+    console.log("Data Send", awaitBody);
 
     const { data } = await this.update.getInstance().execute(awaitBody);
 

@@ -9,6 +9,7 @@ import { CityController } from './city/city.controller';
 import { PlainController } from './plain/plain.controller';
 import { PlainBenefitController } from './PlainBenefit/PlainBenefit.controller';
 import { PlainLocationController } from './PlainLocation/PlainLocation.controller';
+import { ShopController } from './shop/shop.controller';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { PlainLocationController } from './PlainLocation/PlainLocation.controlle
     CityController,
     PlainController,
     PlainBenefitController,
-    PlainLocationController
+    PlainLocationController,
+    ShopController
   ],
 })
 export class ControllersModule {}

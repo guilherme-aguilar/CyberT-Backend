@@ -48,6 +48,11 @@ import { PrismaPlainsLocationsRepository } from '@infra/repositories/prisma/pris
 import { Update_PlainsLocations } from '@useCases/plain-location/UpdatePlainsByLocation.usecases';
 import { DeleteByLocations_PlainsLocations } from '@useCases/plain-location/ClearPlainsByLocation.usecases';
 import { GetByLocation_Plain } from '@useCases/plain/searchByLocation.usecases';
+import { PrismaShopRepository } from '@infra/repositories/prisma/prismaShopRepository';
+import { Get_Shop } from '@useCases/shop/search.usecases';
+import { Update_Shop } from '@useCases/shop/update.usecases';
+import { Disable_Shop } from '@useCases/shop/disable.usecases';
+import { Create_Shop } from '@useCases/shop/create.usecases';
 
 @Module({
   imports: [
@@ -104,6 +109,12 @@ export class UsecasesProxyModule {
   static UPDATE_PLAIN_LOCATION_PROXY = 'UpdatePlainLocationUseCasesProxy';
   static DELETE_ALL_PLAIN_BY_LOCATION_PROXY =
     'DeleteAllPlainByLocationUseCasesProxy';
+
+  // Shop
+  static SEARCH_SHOP_PROXY = 'SearchShopUseCasesProxy';
+  static UPDATE_SHOP_PROXY = 'UpdateShopUseCasesProxy';
+  static DISABLE_SHOP_PROXY = 'DisableShopUseCasesProxy';
+  static CREATE_SHOP_PROXY = 'CreateShopUseCasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -330,10 +341,52 @@ export class UsecasesProxyModule {
         },
 
         {
-          inject: [PrismaPlainsBenefitsRepository],
+          inject: [PrismaPlainsLocationsRepository],
           provide: UsecasesProxyModule.DELETE_ALL_PLAIN_BY_LOCATION_PROXY,
           useFactory: (repository: PrismaPlainsLocationsRepository) =>
             new UseCaseProxy(new DeleteByLocations_PlainsLocations(repository)),
+        },
+
+         //Shop Acctions Crud start =======================================================
+         {
+          inject: [PrismaShopRepository],
+          provide: UsecasesProxyModule.SEARCH_SHOP_PROXY,
+          useFactory: (
+            repository: PrismaShopRepository,
+          ) =>
+            new UseCaseProxy(
+              new Get_Shop(repository),
+            ),
+        },
+        {
+          inject: [PrismaShopRepository],
+          provide: UsecasesProxyModule.UPDATE_SHOP_PROXY,
+          useFactory: (
+            repository: PrismaShopRepository,
+          ) =>
+            new UseCaseProxy(
+              new Update_Shop(repository),
+            ),
+        },
+        {
+          inject: [PrismaShopRepository],
+          provide: UsecasesProxyModule.DISABLE_SHOP_PROXY,
+          useFactory: (
+            repository: PrismaShopRepository,
+          ) =>
+            new UseCaseProxy(
+              new Disable_Shop(repository),
+            ),
+        },
+        {
+          inject: [PrismaShopRepository],
+          provide: UsecasesProxyModule.CREATE_SHOP_PROXY,
+          useFactory: (
+            repository: PrismaShopRepository,
+          ) =>
+            new UseCaseProxy(
+              new Create_Shop(repository),
+            ),
         },
       ],
       exports: [
@@ -374,6 +427,11 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.UPDATE_PLAIN_LOCATION_PROXY,
         UsecasesProxyModule.DELETE_ALL_PLAIN_BY_LOCATION_PROXY,
 
+        //Shop Export
+        UsecasesProxyModule.SEARCH_SHOP_PROXY,
+        UsecasesProxyModule.UPDATE_SHOP_PROXY,
+        UsecasesProxyModule.DISABLE_SHOP_PROXY,
+        UsecasesProxyModule.CREATE_SHOP_PROXY,
       ],
     };
   }
