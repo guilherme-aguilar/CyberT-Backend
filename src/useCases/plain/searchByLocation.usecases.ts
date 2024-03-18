@@ -22,7 +22,6 @@ interface Response {
 @Injectable()
 export class GetByLocation_Plain {
   constructor(
-    
     private PlainRepository: plainRepository,
     private PlainLocationRepository: PlainsLocationsRepository,
     private PlainBenefitsRepository: PlainsBenefitsRepository,
@@ -32,40 +31,45 @@ export class GetByLocation_Plain {
   async execute(request: Request): Promise<Response> {
     const idLocations = request.idLocations;
 
+    // Obtém as informações sobre a localidade
     const dataPlainLocations = await this.PlainLocationRepository.getByLocation(idLocations);
 
+    // Obtém todos os planos
     const dataPlains = await this.PlainRepository.get(true);
 
     const responseData = [];
 
+    // Loop através dos planos
     for (const plain of dataPlains) {
-      let benefits = [];
+      // Verifica se o plano pertence à localidade desejada
+      if (dataPlainLocations.some(location => location.idPlains === plain.id)) {
+        let benefits = [];
 
-      // Busco os benefícios ID vinculados ao plano
-      const dataBenefitsToPlain = await this.PlainBenefitsRepository.getByPlain(
-        plain.id,
-      );
+        // Busca os benefícios ID vinculados ao plano
+        const dataBenefitsToPlain = await this.PlainBenefitsRepository.getByPlain(plain.id);
 
-      // Busco todos os benefícios
-      const dataBenefits = await this.BenefitsRepository.get();
+        // Busca todos os benefícios
+        const dataBenefits = await this.BenefitsRepository.get();
 
-      // Filtro todos os benefícios que o plano possui
-      const benefitNames = dataBenefits
-        .filter((benefit) =>
-          dataBenefitsToPlain.some((item) => item.idBenefits === benefit.id),
-        )
-        .map((benefit) => benefit.name);
+        // Filtra todos os benefícios que o plano possui
+        const benefitNames = dataBenefits
+          .filter((benefit) =>
+            dataBenefitsToPlain.some((item) => item.idBenefits === benefit.id),
+          )
+          .map((benefit) => benefit.name);
 
-      benefits = benefitNames;
+        benefits = benefitNames;
 
-      responseData.push({
-        id: plain.id,
-        internalName: plain.internalName,
-        visibleName: plain.visibleName,
-        price: plain.price,
-        discountPrice: plain.discountPrice,
-        benefits: benefits,
-      });
+        // Adiciona os detalhes do plano à resposta
+        responseData.push({
+          id: plain.id,
+          internalName: plain.internalName,
+          visibleName: plain.visibleName,
+          price: plain.price,
+          discountPrice: plain.discountPrice,
+          benefits: benefits,
+        });
+      }
     }
 
     return {

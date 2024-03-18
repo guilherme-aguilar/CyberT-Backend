@@ -10,6 +10,8 @@ import { PlainController } from './plain/plain.controller';
 import { PlainBenefitController } from './PlainBenefit/PlainBenefit.controller';
 import { PlainLocationController } from './PlainLocation/PlainLocation.controller';
 import { ShopController } from './shop/shop.controller';
+import { BasicInformationController } from './basicInformation/basic-information.controller';
+import { VacancyController } from './vacancy/vacancy.controller';
 
 @Module({
   imports: [
@@ -23,7 +25,9 @@ import { ShopController } from './shop/shop.controller';
     PlainController,
     PlainBenefitController,
     PlainLocationController,
-    ShopController
+    ShopController,
+    BasicInformationController,
+    VacancyController
   ],
 })
 export class ControllersModule {}

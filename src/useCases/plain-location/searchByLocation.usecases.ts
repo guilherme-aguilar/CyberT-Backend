@@ -48,6 +48,8 @@ export class Get_PlainsLocationsByLocations {
       };
     });
 
+    console.log(responseData)
+
     return {
       data: responseData,
     };

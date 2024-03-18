@@ -12,10 +12,12 @@ interface CityProps {
   emailAtendimento: string;
   emailComercial: string;
 
-  TelefonePrincipal: string;
+  telefonePrincipal: string;
+
+  urlLocalizacao: string;
 }
 
-export class ConfigLocal {
+export class BasicConfiguraction {
   private props: CityProps;
 
   constructor(props: CityProps) {
@@ -97,11 +99,20 @@ export class ConfigLocal {
   }
 
   //TelefonePrincipal
-  public get TelefonePrincipal(): string {
-    return this.props.TelefonePrincipal;
+  public get telefonePrincipal(): string {
+    return this.props.telefonePrincipal;
   }
 
-  public set TelefonePrincipal(value: string) {
-    this.props.TelefonePrincipal = value;
+  public set telefonePrincipal(value: string) {
+    this.props.telefonePrincipal = value;
   }
+
+  public get urlLocalizacao(): string {
+  return this.props.urlLocalizacao;
+  }
+  
+  public set urlLocalizacao(value: string) {
+    this.props.urlLocalizacao = value;
+  }
+  
 }

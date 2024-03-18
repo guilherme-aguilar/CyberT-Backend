@@ -23,6 +23,7 @@ import { Get_Plain } from '@useCases/plain/search.usecases';
 import { Update_Plain } from '@useCases/plain/update.usecases';
 import { Disable_Plain } from '@useCases/plain/delete.usecases';
 import { GetByLocation_Plain } from '@useCases/plain/searchByLocation.usecases';
+import { IsPublic } from '@infra/common/decorators/is-public.decorator';
 
 
 @Controller('Plain')
@@ -81,6 +82,7 @@ export class PlainController {
   }
 
   @Get('/byLocation/:id')
+  @IsPublic()
   @ApiResponseType(PlainPresenter, true)
   async SearchByLocation(@Param('id') idLocations: string) {
 

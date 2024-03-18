@@ -3,14 +3,15 @@ import { ShopRepository } from '@app/repositories/shopRepository';
 import { PrismaShopMapper } from '@infra/mappers/prismaShopMappers';
 import { PrismaService } from '@infra/services/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+
 @Injectable()
 export class PrismaShopRepository implements ShopRepository {
   constructor(private prismaService: PrismaService) {}
 
   async create(request: Shop): Promise<void> {
+    
     const row = PrismaShopMapper.toPrisma(request);
-
-    console.log(row)
+    
     await this.prismaService.shop.create({
       data: row,
     });

@@ -53,6 +53,15 @@ import { Get_Shop } from '@useCases/shop/search.usecases';
 import { Update_Shop } from '@useCases/shop/update.usecases';
 import { Disable_Shop } from '@useCases/shop/disable.usecases';
 import { Create_Shop } from '@useCases/shop/create.usecases';
+import { PrismaBasicConfigRepository } from '@infra/repositories/prisma/PrismaBasicConfigRepository';
+import { BasicConfigRepository } from '@app/repositories/basicConfigRepository';
+import { Search_BasicConfig } from '@useCases/basic-config/search.usecases';
+import { Update_BasicConfig } from '@useCases/basic-config/update.usecases';
+import { Find_Vacancy } from '@useCases/vacancy/find.usecases';
+import { PrismaVacancyRepository } from '@infra/repositories/prisma/prismaVacancyRepository';
+import { Finish_Vacancy } from '@useCases/vacancy/finish.usecases';
+import { FindAll_Vacancy } from '@useCases/vacancy/findAll.usecases';
+import { Create_Vacancy } from '@useCases/vacancy/create.usecases';
 
 @Module({
   imports: [
@@ -115,6 +124,16 @@ export class UsecasesProxyModule {
   static UPDATE_SHOP_PROXY = 'UpdateShopUseCasesProxy';
   static DISABLE_SHOP_PROXY = 'DisableShopUseCasesProxy';
   static CREATE_SHOP_PROXY = 'CreateShopUseCasesProxy';
+
+  //BasicConfiguration
+  static SEARCH_BASIC_CONFIGURATION_PROXY = 'SearchBasicConfigurationUseCasesProxy'
+  static UPDATE_BASIC_CONFIGURATION_PROXY = 'UpdateBasicConfigurationUseCasesProxy' 
+
+  // Vacancy
+  static FIND_VACANCY_PROXY = 'FindVacancyUseCasesProxy';
+  static FIND_ALL_VACANCY_PROXY = 'FindAllVacancyUseCasesProxy';
+  static CREATE_VACANCY_PROXY = 'CreateVacancyUseCasesProxy';
+  static FINISH_VACANCY_PROXY = 'FinishVacancyUseCasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -388,6 +407,65 @@ export class UsecasesProxyModule {
               new Create_Shop(repository),
             ),
         },
+
+        //BasicConfiguration Acctions Crude start =========================================
+
+        {
+          inject: [PrismaBasicConfigRepository],
+          provide: UsecasesProxyModule.SEARCH_BASIC_CONFIGURATION_PROXY,
+          useFactory: (
+            BasicConfigRepository : PrismaBasicConfigRepository
+          ) => new UseCaseProxy(
+            new Search_BasicConfig(BasicConfigRepository)
+          )
+        },
+        {
+          inject: [PrismaBasicConfigRepository],
+          provide: UsecasesProxyModule.UPDATE_BASIC_CONFIGURATION_PROXY,
+          useFactory : (
+            BasicConfigRepository : PrismaBasicConfigRepository
+          ) => new UseCaseProxy(
+            new Update_BasicConfig(BasicConfigRepository)
+          )
+        },
+
+        // Vacancy Actions Crud start =========================================
+        {
+          inject: [PrismaVacancyRepository],
+          provide: UsecasesProxyModule.FIND_VACANCY_PROXY,
+          useFactory: (
+            VacancyRepository: PrismaVacancyRepository
+          ) => new UseCaseProxy(
+            new Find_Vacancy(VacancyRepository)
+          )
+        },
+        {
+          inject: [PrismaVacancyRepository],
+          provide: UsecasesProxyModule.FIND_ALL_VACANCY_PROXY,
+          useFactory: (
+            VacancyRepository: PrismaVacancyRepository
+          ) => new UseCaseProxy(
+            new FindAll_Vacancy(VacancyRepository)
+          )
+        },
+        {
+          inject: [PrismaVacancyRepository],
+          provide: UsecasesProxyModule.CREATE_VACANCY_PROXY,
+          useFactory: (
+            VacancyRepository: PrismaVacancyRepository
+          ) => new UseCaseProxy(
+            new Create_Vacancy(VacancyRepository)
+          )
+        },
+        {
+          inject: [PrismaVacancyRepository],
+          provide: UsecasesProxyModule.FINISH_VACANCY_PROXY,
+          useFactory: (
+            VacancyRepository: PrismaVacancyRepository
+          ) => new UseCaseProxy(
+            new Finish_Vacancy(VacancyRepository)
+          )
+        },
       ],
       exports: [
         //Auth Export
@@ -432,7 +510,18 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.UPDATE_SHOP_PROXY,
         UsecasesProxyModule.DISABLE_SHOP_PROXY,
         UsecasesProxyModule.CREATE_SHOP_PROXY,
+
+        //BasicConfiguration Export
+        UsecasesProxyModule.SEARCH_BASIC_CONFIGURATION_PROXY,
+        UsecasesProxyModule.UPDATE_BASIC_CONFIGURATION_PROXY,
+
+        //Vacancy Export
+        UsecasesProxyModule.FIND_VACANCY_PROXY,
+        UsecasesProxyModule.FIND_ALL_VACANCY_PROXY,
+        UsecasesProxyModule.CREATE_VACANCY_PROXY,
+        UsecasesProxyModule.FINISH_VACANCY_PROXY,
       ],
     };
   }
 }
+

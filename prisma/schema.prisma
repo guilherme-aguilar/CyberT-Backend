@@ -27,60 +27,29 @@ model User {
   @@map("user")
 }
 
-model curriculum {
-  id                    String                  @unique @default(uuid())
-  name                  String
-  cpf                   String
-  rg                    String
-  email                 String
-  password              String
-  phone                 String
-  patio                 String
-  neighborhood          String
-  number                String
-  zip_code              String
-  created_at            DateTime                @default(now())
-  read_at               DateTime?
-  disabled_at           DateTime?
-  education             education[]
-  vacancyParticipations vacancyParticipations[]
+model Vacancy {
+  id                 String               @unique @default(uuid())
+  name               String
+  sector             String
+  description        String
+  requests           String
+  desirable          String
+  created_at         DateTime             @default(now())
+  disabled_at        DateTime?
+  participantVacancy ParticipantVacancy[]
 }
 
-model education {
-  id            String        @unique @default(uuid())
-  type          String
-  institution   String
-  duration      String?
-  completed_on  DateTime
-  arquive       String?
-  curriculum_id String
-  disabled_at   DateTime?
-  curriculum    curriculum    @relation(fields: [curriculum_id], references: [id])
-  typ           typeEducation @relation(fields: [type], references: [name])
-}
-
-model typeEducation {
-  name      String      @unique
-  education education[]
-}
-
-model selectProcess {
-  id                    String                  @unique @default(uuid())
-  name                  String
-  sector                String
-  vacancyIssuer         String
-  open_at               DateTime                @default(now())
-  closed_at             DateTime?
-  vacancyParticipations vacancyParticipations[]
-}
-
-model vacancyParticipations {
-  idVacancy    String
-  idCurriculum String
-  curriculum   curriculum    @relation(fields: [idCurriculum], references: [id])
-  vacancy      selectProcess @relation(fields: [idVacancy], references: [id])
-
-  @@id([idCurriculum, idVacancy])
+model ParticipantVacancy {
+  id          String    @unique @default(uuid())
+  name        String
+  cpf         String
+  rg          String
+  email       String
+  phone       String
+  created_at  DateTime  @default(now())
+  disabled_at DateTime?
+  idVacancy   String
+  Vacancy     Vacancy   @relation(fields: [idVacancy], references: [id])
 }
 
 model shop {
@@ -152,4 +121,26 @@ model plainsLocations {
   locations   locations @relation(fields: [idLocations], references: [id])
 
   @@id([idLocations, idPlains])
+}
+
+model basicConfiguration {
+  //Central do cliente
+  urlCentralCliente String @unique @default("http://localhost")
+
+  //Meditores develocidate
+  urlSpeedTest    String
+  urlMinhaConexao String
+
+  //Social Midia
+  urlFacebook  String
+  urlInstagram String
+  urlWhatsapp  String
+
+  //contatos
+  emailAtendimento  String
+  emailComercial    String
+  telefonePrincipal String
+
+  //localizacao
+  urlLocalizacao String
 }

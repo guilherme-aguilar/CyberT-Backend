@@ -26,9 +26,26 @@ export class PlainLocationByPlainPresenter {
   @ApiProperty()
   name: string;
 
+  @ApiProperty()
+  internalName: string;
+
+  @ApiProperty()
+  visibleName: string;
+
+  @ApiProperty()
+  price: string;
+
+  @ApiProperty()
+  discountPrice: string;
+
+
   constructor(raw: any) {
     this.isChecked = raw.isChecked;
     this.id = raw.id;
     this.name = raw.name;
+    this.internalName = raw.internalName;
+    this.visibleName = raw.visibleName;
+    this.price = raw.price;
+    this.discountPrice = raw.discountPrice;
   }
 }

@@ -35,8 +35,6 @@ export class Create_Shop {
       main_point : mainPointValue,
     });
 
-    console.log("Data domain in usecase",data)
-
     await this.repository.create(data);
 
     return {
