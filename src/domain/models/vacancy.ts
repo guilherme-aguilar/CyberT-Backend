@@ -1,3 +1,4 @@
+import { Replace } from '@helpers/replace';
 import { randomUUID } from 'node:crypto';
 
 interface VacancyM {
@@ -14,10 +15,11 @@ export class VacancyE {
   private _id: string;
   private props: VacancyM;
 
-  constructor(props: VacancyM, id?: string) {
+  constructor(props: Replace<VacancyM, { created_at?: Date }>, id?: string) {
     this._id = !id ? randomUUID() : id;
     this.props = {
       ...props,
+      created_at: props.created_at || new Date(),
     };
   }
 
@@ -67,10 +69,6 @@ export class VacancyE {
 
   public get created_at(): Date {
     return this.props.created_at;
-  }
-
-  public set created_at(value: Date) {
-    this.props.created_at = value;
   }
 
   public get disabled_at(): Date | undefined {

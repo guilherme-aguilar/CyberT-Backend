@@ -11,6 +11,7 @@ import { PrismaPlainsLocationsRepository } from './prisma/prismaPlainsLocationsR
 import { PrismaShopRepository } from './prisma/prismaShopRepository';
 import { PrismaBasicConfigRepository } from './prisma/PrismaBasicConfigRepository';
 import { PrismaVacancyRepository } from './prisma/prismaVacancyRepository';
+import { PrismaParticipantVacancyRepository } from './prisma/prismaParticipantVacancyRepository';
 
 @Module({
   imports: [PrismaModule],
@@ -25,7 +26,8 @@ import { PrismaVacancyRepository } from './prisma/prismaVacancyRepository';
     PrismaPlainsLocationsRepository,
     PrismaShopRepository,
     PrismaBasicConfigRepository,
-    PrismaVacancyRepository
+    PrismaVacancyRepository,
+    PrismaParticipantVacancyRepository
   ],
   exports: [
     DatabaseUserRepository,
@@ -40,7 +42,8 @@ import { PrismaVacancyRepository } from './prisma/prismaVacancyRepository';
     PrismaPlainsLocationsRepository,
     PrismaShopRepository,
     PrismaBasicConfigRepository,
-    PrismaVacancyRepository
+    PrismaVacancyRepository,
+    PrismaParticipantVacancyRepository
   ],
 })
 export class RepositoriesModule {}

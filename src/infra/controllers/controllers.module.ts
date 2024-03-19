@@ -12,6 +12,7 @@ import { PlainLocationController } from './PlainLocation/PlainLocation.controlle
 import { ShopController } from './shop/shop.controller';
 import { BasicInformationController } from './basicInformation/basic-information.controller';
 import { VacancyController } from './vacancy/vacancy.controller';
+import { ParticipantVacancyController } from './participantVacancy/participantVacancy.controller';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { VacancyController } from './vacancy/vacancy.controller';
     PlainLocationController,
     ShopController,
     BasicInformationController,
-    VacancyController
+    VacancyController,
+    ParticipantVacancyController
   ],
 })
 export class ControllersModule {}

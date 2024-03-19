@@ -25,7 +25,6 @@ export class Create_Vacancy {
       description: data.description,
       requests: data.requests,
       desirable: data.desirable,
-      created_at: new Date(),
     });
 
     await this.vacancyRepository.create(vacancy);

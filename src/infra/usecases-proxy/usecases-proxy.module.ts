@@ -62,6 +62,11 @@ import { PrismaVacancyRepository } from '@infra/repositories/prisma/prismaVacanc
 import { Finish_Vacancy } from '@useCases/vacancy/finish.usecases';
 import { FindAll_Vacancy } from '@useCases/vacancy/findAll.usecases';
 import { Create_Vacancy } from '@useCases/vacancy/create.usecases';
+import { PrismaParticipantVacancyRepository } from '@infra/repositories/prisma/prismaParticipantVacancyRepository';
+import { Create_ParticipantVacancy } from '@useCases/participant-vacancy/create.usecases';
+import { Findall_ParticipantVacancy } from '@useCases/participant-vacancy/findAll.usecases';
+import { FindById_ParticipantVacancy } from '@useCases/participant-vacancy/findById.usecases';
+import { FindByVacancy_ParticipantVacancy } from '@useCases/participant-vacancy/findByVacancy.usecases';
 
 @Module({
   imports: [
@@ -134,6 +139,14 @@ export class UsecasesProxyModule {
   static FIND_ALL_VACANCY_PROXY = 'FindAllVacancyUseCasesProxy';
   static CREATE_VACANCY_PROXY = 'CreateVacancyUseCasesProxy';
   static FINISH_VACANCY_PROXY = 'FinishVacancyUseCasesProxy';
+
+
+  // Participant Vacancy
+  static NEW_PARTICIPANT_VACANCY_PROXY = 'NewParticipantVacancyUseCasesProxy';
+  static FIND_ALL_PARTICIPANT_VACANCY_PROXY = 'FindAllParticipantVacancyUseCasesProxy';
+  static FIND_BY_ID_PARTICIPANT_VACANCY_PROXY = 'FindByIdParticipantVacancyUseCasesProxy';
+  static FIND_BY_VACANCY_PARTICIPANT_VACANCY_PROXY = 'FindByVacancyParticipantVacancyUseCasesProxy';
+  static FINISH_PARTICIPANT_VACANCY_PROXY = 'FinishParticipantVacancyUseCasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -466,6 +479,44 @@ export class UsecasesProxyModule {
             new Finish_Vacancy(VacancyRepository)
           )
         },
+
+        // Participant Vacancy Actions Crud start =========================================
+        {
+          inject: [PrismaParticipantVacancyRepository],
+          provide: UsecasesProxyModule.NEW_PARTICIPANT_VACANCY_PROXY,
+          useFactory: (
+            ParticipantVacancyRepository: PrismaParticipantVacancyRepository
+          ) => new UseCaseProxy(
+            new Create_ParticipantVacancy(ParticipantVacancyRepository)
+          )
+        },
+        {
+          inject: [PrismaParticipantVacancyRepository],
+          provide: UsecasesProxyModule.FIND_ALL_PARTICIPANT_VACANCY_PROXY,
+          useFactory: (
+            ParticipantVacancyRepository: PrismaParticipantVacancyRepository
+          ) => new UseCaseProxy(
+            new Findall_ParticipantVacancy(ParticipantVacancyRepository)
+          )
+        },
+        {
+          inject: [PrismaParticipantVacancyRepository],
+          provide: UsecasesProxyModule.FIND_BY_ID_PARTICIPANT_VACANCY_PROXY,
+          useFactory: (
+            ParticipantVacancyRepository: PrismaParticipantVacancyRepository
+          ) => new UseCaseProxy(
+            new FindById_ParticipantVacancy(ParticipantVacancyRepository)
+          )
+        },
+        {
+          inject: [PrismaParticipantVacancyRepository],
+          provide: UsecasesProxyModule.FIND_BY_VACANCY_PARTICIPANT_VACANCY_PROXY,
+          useFactory: (
+            ParticipantVacancyRepository: PrismaParticipantVacancyRepository
+          ) => new UseCaseProxy(
+            new FindByVacancy_ParticipantVacancy(ParticipantVacancyRepository)
+          )
+        },
       ],
       exports: [
         //Auth Export
@@ -520,6 +571,12 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.FIND_ALL_VACANCY_PROXY,
         UsecasesProxyModule.CREATE_VACANCY_PROXY,
         UsecasesProxyModule.FINISH_VACANCY_PROXY,
+
+        // ParticipantVacancy Export
+        UsecasesProxyModule.NEW_PARTICIPANT_VACANCY_PROXY,
+        UsecasesProxyModule.FIND_ALL_PARTICIPANT_VACANCY_PROXY,
+        UsecasesProxyModule.FIND_BY_ID_PARTICIPANT_VACANCY_PROXY,
+        UsecasesProxyModule.FIND_BY_VACANCY_PARTICIPANT_VACANCY_PROXY,
       ],
     };
   }
