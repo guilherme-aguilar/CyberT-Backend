@@ -48,6 +48,5 @@ Para acessar a documentação da API, utilize o seguinte endpoint: /api
 - [✅] Todas as rotas da aplicação, por padrão, devem ser privadas, possibilitando acessos protegidos pelo JWT.
 - [✅] Deve ser possível criar exceções de proteção, tornando uma rota pública.
 
-- 
 - [✅] Participante poderá se inscrever em inúmeras vagas.
 - [✅] Participante não pode se inscrever duas vezes na mesma vaga.
