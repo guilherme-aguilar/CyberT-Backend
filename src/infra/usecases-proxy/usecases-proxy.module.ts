@@ -67,6 +67,7 @@ import { Create_ParticipantVacancy } from '@useCases/participant-vacancy/create.
 import { Findall_ParticipantVacancy } from '@useCases/participant-vacancy/findAll.usecases';
 import { FindById_ParticipantVacancy } from '@useCases/participant-vacancy/findById.usecases';
 import { FindByVacancy_ParticipantVacancy } from '@useCases/participant-vacancy/findByVacancy.usecases';
+import { ChangePassword_User } from '@useCases/user/changePassword.usecases';
 
 @Module({
   imports: [
@@ -131,8 +132,10 @@ export class UsecasesProxyModule {
   static CREATE_SHOP_PROXY = 'CreateShopUseCasesProxy';
 
   //BasicConfiguration
-  static SEARCH_BASIC_CONFIGURATION_PROXY = 'SearchBasicConfigurationUseCasesProxy'
-  static UPDATE_BASIC_CONFIGURATION_PROXY = 'UpdateBasicConfigurationUseCasesProxy' 
+  static SEARCH_BASIC_CONFIGURATION_PROXY =
+    'SearchBasicConfigurationUseCasesProxy';
+  static UPDATE_BASIC_CONFIGURATION_PROXY =
+    'UpdateBasicConfigurationUseCasesProxy';
 
   // Vacancy
   static FIND_VACANCY_PROXY = 'FindVacancyUseCasesProxy';
@@ -140,13 +143,19 @@ export class UsecasesProxyModule {
   static CREATE_VACANCY_PROXY = 'CreateVacancyUseCasesProxy';
   static FINISH_VACANCY_PROXY = 'FinishVacancyUseCasesProxy';
 
-
   // Participant Vacancy
   static NEW_PARTICIPANT_VACANCY_PROXY = 'NewParticipantVacancyUseCasesProxy';
-  static FIND_ALL_PARTICIPANT_VACANCY_PROXY = 'FindAllParticipantVacancyUseCasesProxy';
-  static FIND_BY_ID_PARTICIPANT_VACANCY_PROXY = 'FindByIdParticipantVacancyUseCasesProxy';
-  static FIND_BY_VACANCY_PARTICIPANT_VACANCY_PROXY = 'FindByVacancyParticipantVacancyUseCasesProxy';
-  static FINISH_PARTICIPANT_VACANCY_PROXY = 'FinishParticipantVacancyUseCasesProxy';
+  static FIND_ALL_PARTICIPANT_VACANCY_PROXY =
+    'FindAllParticipantVacancyUseCasesProxy';
+  static FIND_BY_ID_PARTICIPANT_VACANCY_PROXY =
+    'FindByIdParticipantVacancyUseCasesProxy';
+  static FIND_BY_VACANCY_PARTICIPANT_VACANCY_PROXY =
+    'FindByVacancyParticipantVacancyUseCasesProxy';
+  static FINISH_PARTICIPANT_VACANCY_PROXY =
+    'FinishParticipantVacancyUseCasesProxy';
+
+  //User
+  static CHANGE_PASSWORD_USER_PROXY = 'ChangePasswordUserUseCasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -379,46 +388,30 @@ export class UsecasesProxyModule {
             new UseCaseProxy(new DeleteByLocations_PlainsLocations(repository)),
         },
 
-         //Shop Acctions Crud start =======================================================
-         {
+        //Shop Acctions Crud start =======================================================
+        {
           inject: [PrismaShopRepository],
           provide: UsecasesProxyModule.SEARCH_SHOP_PROXY,
-          useFactory: (
-            repository: PrismaShopRepository,
-          ) =>
-            new UseCaseProxy(
-              new Get_Shop(repository),
-            ),
+          useFactory: (repository: PrismaShopRepository) =>
+            new UseCaseProxy(new Get_Shop(repository)),
         },
         {
           inject: [PrismaShopRepository],
           provide: UsecasesProxyModule.UPDATE_SHOP_PROXY,
-          useFactory: (
-            repository: PrismaShopRepository,
-          ) =>
-            new UseCaseProxy(
-              new Update_Shop(repository),
-            ),
+          useFactory: (repository: PrismaShopRepository) =>
+            new UseCaseProxy(new Update_Shop(repository)),
         },
         {
           inject: [PrismaShopRepository],
           provide: UsecasesProxyModule.DISABLE_SHOP_PROXY,
-          useFactory: (
-            repository: PrismaShopRepository,
-          ) =>
-            new UseCaseProxy(
-              new Disable_Shop(repository),
-            ),
+          useFactory: (repository: PrismaShopRepository) =>
+            new UseCaseProxy(new Disable_Shop(repository)),
         },
         {
           inject: [PrismaShopRepository],
           provide: UsecasesProxyModule.CREATE_SHOP_PROXY,
-          useFactory: (
-            repository: PrismaShopRepository,
-          ) =>
-            new UseCaseProxy(
-              new Create_Shop(repository),
-            ),
+          useFactory: (repository: PrismaShopRepository) =>
+            new UseCaseProxy(new Create_Shop(repository)),
         },
 
         //BasicConfiguration Acctions Crude start =========================================
@@ -426,58 +419,40 @@ export class UsecasesProxyModule {
         {
           inject: [PrismaBasicConfigRepository],
           provide: UsecasesProxyModule.SEARCH_BASIC_CONFIGURATION_PROXY,
-          useFactory: (
-            BasicConfigRepository : PrismaBasicConfigRepository
-          ) => new UseCaseProxy(
-            new Search_BasicConfig(BasicConfigRepository)
-          )
+          useFactory: (BasicConfigRepository: PrismaBasicConfigRepository) =>
+            new UseCaseProxy(new Search_BasicConfig(BasicConfigRepository)),
         },
         {
           inject: [PrismaBasicConfigRepository],
           provide: UsecasesProxyModule.UPDATE_BASIC_CONFIGURATION_PROXY,
-          useFactory : (
-            BasicConfigRepository : PrismaBasicConfigRepository
-          ) => new UseCaseProxy(
-            new Update_BasicConfig(BasicConfigRepository)
-          )
+          useFactory: (BasicConfigRepository: PrismaBasicConfigRepository) =>
+            new UseCaseProxy(new Update_BasicConfig(BasicConfigRepository)),
         },
 
         // Vacancy Actions Crud start =========================================
         {
           inject: [PrismaVacancyRepository],
           provide: UsecasesProxyModule.FIND_VACANCY_PROXY,
-          useFactory: (
-            VacancyRepository: PrismaVacancyRepository
-          ) => new UseCaseProxy(
-            new Find_Vacancy(VacancyRepository)
-          )
+          useFactory: (VacancyRepository: PrismaVacancyRepository) =>
+            new UseCaseProxy(new Find_Vacancy(VacancyRepository)),
         },
         {
           inject: [PrismaVacancyRepository],
           provide: UsecasesProxyModule.FIND_ALL_VACANCY_PROXY,
-          useFactory: (
-            VacancyRepository: PrismaVacancyRepository
-          ) => new UseCaseProxy(
-            new FindAll_Vacancy(VacancyRepository)
-          )
+          useFactory: (VacancyRepository: PrismaVacancyRepository) =>
+            new UseCaseProxy(new FindAll_Vacancy(VacancyRepository)),
         },
         {
           inject: [PrismaVacancyRepository],
           provide: UsecasesProxyModule.CREATE_VACANCY_PROXY,
-          useFactory: (
-            VacancyRepository: PrismaVacancyRepository
-          ) => new UseCaseProxy(
-            new Create_Vacancy(VacancyRepository)
-          )
+          useFactory: (VacancyRepository: PrismaVacancyRepository) =>
+            new UseCaseProxy(new Create_Vacancy(VacancyRepository)),
         },
         {
           inject: [PrismaVacancyRepository],
           provide: UsecasesProxyModule.FINISH_VACANCY_PROXY,
-          useFactory: (
-            VacancyRepository: PrismaVacancyRepository
-          ) => new UseCaseProxy(
-            new Finish_Vacancy(VacancyRepository)
-          )
+          useFactory: (VacancyRepository: PrismaVacancyRepository) =>
+            new UseCaseProxy(new Finish_Vacancy(VacancyRepository)),
         },
 
         // Participant Vacancy Actions Crud start =========================================
@@ -485,37 +460,61 @@ export class UsecasesProxyModule {
           inject: [PrismaParticipantVacancyRepository],
           provide: UsecasesProxyModule.NEW_PARTICIPANT_VACANCY_PROXY,
           useFactory: (
-            ParticipantVacancyRepository: PrismaParticipantVacancyRepository
-          ) => new UseCaseProxy(
-            new Create_ParticipantVacancy(ParticipantVacancyRepository)
-          )
+            ParticipantVacancyRepository: PrismaParticipantVacancyRepository,
+          ) =>
+            new UseCaseProxy(
+              new Create_ParticipantVacancy(ParticipantVacancyRepository),
+            ),
         },
         {
           inject: [PrismaParticipantVacancyRepository],
           provide: UsecasesProxyModule.FIND_ALL_PARTICIPANT_VACANCY_PROXY,
           useFactory: (
-            ParticipantVacancyRepository: PrismaParticipantVacancyRepository
-          ) => new UseCaseProxy(
-            new Findall_ParticipantVacancy(ParticipantVacancyRepository)
-          )
+            ParticipantVacancyRepository: PrismaParticipantVacancyRepository,
+          ) =>
+            new UseCaseProxy(
+              new Findall_ParticipantVacancy(ParticipantVacancyRepository),
+            ),
         },
         {
           inject: [PrismaParticipantVacancyRepository],
           provide: UsecasesProxyModule.FIND_BY_ID_PARTICIPANT_VACANCY_PROXY,
           useFactory: (
-            ParticipantVacancyRepository: PrismaParticipantVacancyRepository
-          ) => new UseCaseProxy(
-            new FindById_ParticipantVacancy(ParticipantVacancyRepository)
-          )
+            ParticipantVacancyRepository: PrismaParticipantVacancyRepository,
+          ) =>
+            new UseCaseProxy(
+              new FindById_ParticipantVacancy(ParticipantVacancyRepository),
+            ),
         },
         {
           inject: [PrismaParticipantVacancyRepository],
-          provide: UsecasesProxyModule.FIND_BY_VACANCY_PARTICIPANT_VACANCY_PROXY,
+          provide:
+            UsecasesProxyModule.FIND_BY_VACANCY_PARTICIPANT_VACANCY_PROXY,
           useFactory: (
-            ParticipantVacancyRepository: PrismaParticipantVacancyRepository
-          ) => new UseCaseProxy(
-            new FindByVacancy_ParticipantVacancy(ParticipantVacancyRepository)
-          )
+            ParticipantVacancyRepository: PrismaParticipantVacancyRepository,
+          ) =>
+            new UseCaseProxy(
+              new FindByVacancy_ParticipantVacancy(
+                ParticipantVacancyRepository,
+              ),
+            ),
+        },
+
+        //User Crud Start =============
+        {
+          inject: [DatabaseUserRepository, BcryptService],
+          provide:
+            UsecasesProxyModule.CHANGE_PASSWORD_USER_PROXY,
+          useFactory: (
+            userRepository: DatabaseUserRepository,
+            bcryptService: BcryptService,
+          ) =>
+            new UseCaseProxy(
+              new ChangePassword_User(
+                userRepository,
+                bcryptService,
+              ),
+            ),
         },
       ],
       exports: [
@@ -577,8 +576,10 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.FIND_ALL_PARTICIPANT_VACANCY_PROXY,
         UsecasesProxyModule.FIND_BY_ID_PARTICIPANT_VACANCY_PROXY,
         UsecasesProxyModule.FIND_BY_VACANCY_PARTICIPANT_VACANCY_PROXY,
+
+        //User Export
+        UsecasesProxyModule.CHANGE_PASSWORD_USER_PROXY
       ],
     };
   }
 }
-

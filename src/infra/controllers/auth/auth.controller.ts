@@ -91,7 +91,11 @@ export class AuthController {
       .execute(request.user.username);
     const response = new IsAuthPresenter();
     response.username = user.username;
-    return response;
+    
+
+    return request.user
+
+
   }
 
   // @Get('refresh')

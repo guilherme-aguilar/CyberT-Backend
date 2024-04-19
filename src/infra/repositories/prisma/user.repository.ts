@@ -43,4 +43,13 @@ export class DatabaseUserRepository implements UserRepository {
       },
     });
   }
+
+  async changePassword(username: string, password: string): Promise<void> {
+    await this.userEntityRepository.user.update({
+      where: {
+        username: username,
+      },
+      data: { password: password },
+    });
+  }
 }

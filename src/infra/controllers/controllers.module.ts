@@ -13,6 +13,7 @@ import { ShopController } from './shop/shop.controller';
 import { BasicInformationController } from './basicInformation/basic-information.controller';
 import { VacancyController } from './vacancy/vacancy.controller';
 import { ParticipantVacancyController } from './participantVacancy/participantVacancy.controller';
+import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { ParticipantVacancyController } from './participantVacancy/participantVa
     ShopController,
     BasicInformationController,
     VacancyController,
-    ParticipantVacancyController
+    ParticipantVacancyController,
+    UserController
   ],
 })
 export class ControllersModule {}

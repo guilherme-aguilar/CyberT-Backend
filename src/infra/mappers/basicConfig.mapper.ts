@@ -13,6 +13,7 @@ export class BasicConfigMapper {
       emailAtendimento: raw.emailAtendimento,
       emailComercial: raw.emailComercial,
       telefonePrincipal: raw.telefonePrincipal,
+      urlLocalizacao: raw.urlLocalizacao
     };
   }
 

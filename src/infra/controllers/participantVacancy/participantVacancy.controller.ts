@@ -48,6 +48,7 @@ export class ParticipantVacancyController {
   ) {}
 
   @Post()
+  @IsPublic()
   async addVacancy(
     @Body() dto: addParticipantVacancyDto,
   ): Promise<PartipantVacancyPresenter> {
@@ -56,7 +57,6 @@ export class ParticipantVacancyController {
     return new PartipantVacancyPresenter(vacancy.data);
   }
 
-  @IsPublic()
   @Get()
   async findAll(): Promise<PartipantVacancyPresenter[]> {
     const vacancies = await this._findAll.getInstance().execute();

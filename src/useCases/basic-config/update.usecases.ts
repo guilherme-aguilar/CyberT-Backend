@@ -28,21 +28,19 @@ export class Update_BasicConfig {
   constructor(private readonly BasicConfigRepository: BasicConfigRepository) {}
 
   async execute(request: Request): Promise<Response> {
-    
+    const UpdatedData = {
+      ...request,
+    };
 
-    const UpdatedData = { 
-      ...request
-    }
+    console.log(request);
 
+    const oldData = await this.BasicConfigRepository.search();
 
-   
-    const oldData = await this.BasicConfigRepository.search()
+    Object.assign(oldData, UpdatedData);
 
+    console.log(oldData);
 
-    Object.assign(oldData, UpdatedData)
-
-    
-      await this.BasicConfigRepository.update(oldData);
+    await this.BasicConfigRepository.update(oldData);
 
     return {
       data: oldData,

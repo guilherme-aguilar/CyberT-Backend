@@ -29,7 +29,7 @@ export class Create_ParticipantVacancy {
       cpf, email, phone, rg, idVacancy
     })
 
-    if(ValidateData) throw new UnauthorizedException("Os dados inseridos se encontram registrados para esta vaga.");
+    if(ValidateData) throw new UnauthorizedException("Os dados inseridos já estão registrados para esta vaga.");
 
     const entitie = new ParticipantVacancyE({
       cpf,

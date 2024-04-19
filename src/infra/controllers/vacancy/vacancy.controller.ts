@@ -9,6 +9,7 @@ import { Finish_Vacancy } from '@useCases/vacancy/finish.usecases';
 import { Create_Vacancy } from '@useCases/vacancy/create.usecases';
 import { IsPublic } from '@infra/common/decorators/is-public.decorator';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponseType } from '@infra/common/swagger/response.decorator';
 
 
 @ApiTags('Vacancy')
@@ -52,6 +53,7 @@ export class VacancyController {
   }
 
   @IsPublic()
+  @ApiResponseType(VacancyPresenter, true)
   @Get()
   async findAll(): Promise<VacancyPresenter[]> {
     const vacancies = await this._findAll.getInstance().execute();
@@ -61,6 +63,7 @@ export class VacancyController {
 
   @IsPublic()
   @Get('/byid/:id')
+  @ApiResponseType(VacancyPresenter, true)
   async findOne(@Param('id') id: string): Promise<VacancyPresenter> {
     const vacancy = await this._findbyid.getInstance().execute({id});
 
