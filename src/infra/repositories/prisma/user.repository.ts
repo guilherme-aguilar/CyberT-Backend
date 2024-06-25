@@ -52,4 +52,12 @@ export class DatabaseUserRepository implements UserRepository {
       data: { password: password },
     });
   }
+
+  async create(username: string, password: string): Promise<void> {
+    await this.userEntityRepository.user.create({
+      data: {
+        username, password
+      }
+    })
+  }
 }

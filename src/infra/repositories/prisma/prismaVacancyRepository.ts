@@ -31,9 +31,18 @@ export class PrismaVacancyRepository  implements VacancyRepository{
         return vacancy ? VacancyMapper.toDomain(vacancy) : null;
   }
 
-  async findAll(): Promise<VacancyE[]> {
+  async findAll(state?: "active" | "deactive" | "all"): Promise<VacancyE[]> {
     
-      const vacancies = await this.prisma.vacancy.findMany();
+      let where = {};
+      if (state === "active") {
+        where = { disabled_at: null };
+      } else if (state === "deactive") {
+        where = { disabled_at: { not: null } };
+      }
+
+      const vacancies = await this.prisma.vacancy.findMany({
+        where : where
+      });
 
     return vacancies.map(VacancyMapper.toDomain);
   }

@@ -83,8 +83,8 @@ model plains {
   internalName       String
   price              String
   discountPrice      String?
-  idProfileBandwidth String
-  profileBandwidth   profileBandwidth  @relation(fields: [idProfileBandwidth], references: [id])
+  idProfileBandwidth String?
+  profileBandwidth   profileBandwidth? @relation(fields: [idProfileBandwidth], references: [id])
   disabled_at        DateTime?
   PlainsBenefits     plainsBenefits[]
   plainsLocations    plainsLocations[]
@@ -143,4 +143,5 @@ model basicConfiguration {
 
   //localizacao
   urlLocalizacao String
+  multipleCitys  Boolean
 }

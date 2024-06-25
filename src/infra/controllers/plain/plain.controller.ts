@@ -78,7 +78,7 @@ export class PlainController {
 
     const ReceivedUseCase = await this.search.getInstance().execute({isActive});
 
-    return ReceivedUseCase.data.map((item) => new PlainPresenter(item));
+    return ReceivedUseCase.data.map((item) => new PlainByLocationPresenter(item));
   }
 
   @Get('/byLocation/:id')

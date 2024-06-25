@@ -11,5 +11,7 @@ export abstract class benefitsRepository {
   abstract getById(id : string) : Promise<Benefit>
 
   abstract get(isActive ?: boolean) : Promise<Benefit[]>
+
+  abstract delete(id: string) : Promise<void>
   
 }

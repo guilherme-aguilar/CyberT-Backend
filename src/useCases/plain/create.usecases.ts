@@ -1,3 +1,4 @@
+
 import { Plain } from '@app/models/plains';
 import { plainRepository } from '@app/repositories/plainRepository';
 import { Injectable } from '@nestjs/common';
@@ -7,7 +8,7 @@ interface Request {
   internalName: string;
   price: string;
   discountPrice?: string;
-  idProfileBandwidth: string;
+  idProfileBandwidth?: string;
 }
 
 interface Response {

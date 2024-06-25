@@ -10,8 +10,8 @@ interface response {
 export class FindAll_Vacancy {
   constructor(private readonly vacancyRepository: VacancyRepository) {}
 
-  async execute(): Promise<response> {
-    const vacancies = await this.vacancyRepository.findAll();
+  async execute(state?: "active" | "deactive" | "all"): Promise<response> {
+    const vacancies = await this.vacancyRepository.findAll(state);
 
     return { data: vacancies };
   }

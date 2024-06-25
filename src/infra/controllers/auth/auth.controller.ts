@@ -19,19 +19,15 @@ import {
 
 import { AuthLoginDto } from './auth-dto.class';
 import { IsAuthPresenter } from './auth.presenter';
-
-import JwtRefreshGuard from '../../common/guards/jwtRefresh.guard';
-import { JwtAuthGuard } from '../../common/guards/jwtAuth.guard';
-import { LoginGuard } from '../../common/guards/login.guard';
-
-import { LoginUseCases } from '../../../usecases/auth/login.usecases';
-import { IsAuthenticatedUseCases } from '../../../usecases/auth/isAuthenticated.usecases';
-import { LogoutUseCases } from '../../../usecases/auth/logout.usecases';
-
-import { ApiResponseType } from '../../common/swagger/response.decorator';
-import { UsecasesProxyModule } from 'src/infra/usecases-proxy/usecases-proxy.module';
-import { UseCaseProxy } from 'src/infra/usecases-proxy/usecases-proxy';
-import { IsPublic } from 'src/infra/common/decorators/is-public.decorator';
+import { JwtAuthGuard } from '@infra/common/guards/jwtAuth.guard';
+import { LoginGuard } from '@infra/common/guards/login.guard';
+import { LoginUseCases } from '@useCases/auth/login.usecases';
+import { IsAuthenticatedUseCases } from '@useCases/auth/isAuthenticated.usecases';
+import { LogoutUseCases } from '@useCases/auth/logout.usecases';
+import { ApiResponseType } from '@infra/common/swagger/response.decorator';
+import { UsecasesProxyModule } from '@infra/usecases-proxy/usecases-proxy.module';
+import { UseCaseProxy } from '@infra/usecases-proxy/usecases-proxy';
+import { IsPublic } from '@infra/common/decorators/is-public.decorator';
 
 @Controller('auth')
 @ApiTags('auth')

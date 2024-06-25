@@ -3,17 +3,11 @@ import {
   Controller,
   Get,
   Inject,
-  Param,
-  Patch,
-  Post,
+  Param, Post
 } from '@nestjs/common';
 
 import { UsecasesProxyModule } from '@infra/usecases-proxy/usecases-proxy.module';
 import { UseCaseProxy } from '@infra/usecases-proxy/usecases-proxy';
-import { FindAll_Vacancy } from '@useCases/vacancy/findAll.usecases';
-import { Find_Vacancy } from '@useCases/vacancy/find.usecases';
-import { Finish_Vacancy } from '@useCases/vacancy/finish.usecases';
-import { Create_Vacancy } from '@useCases/vacancy/create.usecases';
 import { IsPublic } from '@infra/common/decorators/is-public.decorator';
 import { Create_ParticipantVacancy } from '@useCases/participant-vacancy/create.usecases';
 import { Findall_ParticipantVacancy } from '@useCases/participant-vacancy/findAll.usecases';
@@ -72,9 +66,12 @@ export class ParticipantVacancyController {
   }
 
   @Get('/byVacancy/:id')
-  async findByVacancy(@Param('id') id: string): Promise<PartipantVacancyPresenter> {
-    const vacancy = await this._findbyid.getInstance().execute({ id });
+  @ApiResponse({ type: PartipantVacancyPresenter, isArray: true })
+  async findByVacancy(@Param('id') id: string): Promise<PartipantVacancyPresenter[]> {
+    const vacancy = await this._findByVacancy.getInstance().execute({ idVacancy: id});
 
-    return new PartipantVacancyPresenter(vacancy.data);
+    const httpView = vacancy.data.map((vacancy) => new PartipantVacancyPresenter(vacancy));
+
+    return httpView
   }
 }

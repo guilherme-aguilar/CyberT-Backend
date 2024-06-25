@@ -15,6 +15,7 @@ interface CityProps {
   telefonePrincipal: string;
 
   urlLocalizacao: string;
+  multipleCitys: boolean;
 }
 
 export class BasicConfiguraction {
@@ -114,5 +115,8 @@ export class BasicConfiguraction {
   public set urlLocalizacao(value: string) {
     this.props.urlLocalizacao = value;
   }
-  
+
+  public get multipleCitys(){
+  return this.props.multipleCitys
+  }
 }

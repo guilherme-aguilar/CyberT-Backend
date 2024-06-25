@@ -6,7 +6,7 @@ export abstract class VacancyRepository {
 
   abstract find(id: string): Promise<VacancyE | null>;
 
-  abstract findAll(): Promise<VacancyE[]>;
+  abstract findAll(state?: "active" | "deactive" | "all"): Promise<VacancyE[]>;
 
   abstract update(vacancy: VacancyE): Promise<void>;
 }

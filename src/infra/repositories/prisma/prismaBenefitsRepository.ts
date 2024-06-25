@@ -8,6 +8,14 @@ import { PrismaBenefitsMapper } from '@infra/mappers/prismaBenefitsMappers';
 @Injectable()
 export class PrismaBenefitsRepository implements benefitsRepository {
   constructor(private prismaService: PrismaService) {}
+  
+  async delete(id: string): Promise<void> {
+    await this.prismaService.benefits.delete({
+      where: {
+        id: id
+      }
+    })
+  }
 
   async create(request: Benefit): Promise<void> {
     const row = PrismaBenefitsMapper.toPrisma(request);

@@ -5,6 +5,8 @@ import { UseCaseProxy } from '@infra/usecases-proxy/usecases-proxy';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ChangePassword_User } from '@useCases/user/changePassword.usecases';
 import { ChangePasswordPresenter } from './user.presenter';
+import { IsPublic } from '@infra/common/decorators/is-public.decorator';
+import { GenerateInitial_User } from '@useCases/user/generateInitialUser.usecases';
 
 
 @ApiTags('User')
@@ -17,6 +19,8 @@ export class UserController {
     //create
     @Inject(UsecasesProxyModule.CHANGE_PASSWORD_USER_PROXY)
     private readonly _changePassword: UseCaseProxy<ChangePassword_User>,
+    @Inject(UsecasesProxyModule.GENERATE_INITIAL_USER)
+    private readonly _generateInitialUser: UseCaseProxy<GenerateInitial_User>,
   ) {}
 
   @Post("ChangePassword")
@@ -28,6 +32,14 @@ export class UserController {
     const dataSend = {username: request.user.username , ...receivedDto}
 
     await this._changePassword.getInstance().execute(dataSend);
+
+  }
+
+  @IsPublic()
+  @Post("InitialUser")
+  async generateInitialUser(
+  ): Promise<void> {
+    await this._generateInitialUser.getInstance().execute();
 
   }
 

@@ -1,54 +1,39 @@
 -- CreateTable
-CREATE TABLE "curriculum" (
+CREATE TABLE "user" (
+    "id" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "create_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "last_login" TIMESTAMP(3),
+    "hach_refresh_token" TEXT,
+
+    CONSTRAINT "user_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Vacancy" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "sector" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "requests" TEXT NOT NULL,
+    "desirable" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "disabled_at" TIMESTAMP(3)
+);
+
+-- CreateTable
+CREATE TABLE "ParticipantVacancy" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "cpf" TEXT NOT NULL,
     "rg" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
-    "patio" TEXT NOT NULL,
-    "neighborhood" TEXT NOT NULL,
-    "number" TEXT NOT NULL,
-    "zip_code" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "read_at" TIMESTAMP(3),
-    "disabled_at" TIMESTAMP(3)
-);
-
--- CreateTable
-CREATE TABLE "education" (
-    "id" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
-    "institution" TEXT NOT NULL,
-    "duration" TEXT,
-    "completed_on" TIMESTAMP(3) NOT NULL,
-    "arquive" TEXT,
-    "curriculum_id" TEXT NOT NULL,
-    "disabled_at" TIMESTAMP(3)
-);
-
--- CreateTable
-CREATE TABLE "typeEducation" (
-    "name" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "selectProcess" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "sector" TEXT NOT NULL,
-    "vacancyIssuer" TEXT NOT NULL,
-    "open_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "closed_at" TIMESTAMP(3)
-);
-
--- CreateTable
-CREATE TABLE "vacancyParticipations" (
-    "idVacancy" TEXT NOT NULL,
-    "idCurriculum" TEXT NOT NULL,
-
-    CONSTRAINT "vacancyParticipations_pkey" PRIMARY KEY ("idCurriculum","idVacancy")
+    "disabled_at" TIMESTAMP(3),
+    "idVacancy" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -82,7 +67,7 @@ CREATE TABLE "plains" (
     "internalName" TEXT NOT NULL,
     "price" TEXT NOT NULL,
     "discountPrice" TEXT,
-    "idProfileBandwidth" TEXT NOT NULL,
+    "idProfileBandwidth" TEXT,
     "disabled_at" TIMESTAMP(3)
 );
 
@@ -117,17 +102,29 @@ CREATE TABLE "plainsLocations" (
     CONSTRAINT "plainsLocations_pkey" PRIMARY KEY ("idLocations","idPlains")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "curriculum_id_key" ON "curriculum"("id");
+-- CreateTable
+CREATE TABLE "basicConfiguration" (
+    "urlCentralCliente" TEXT NOT NULL DEFAULT 'http://localhost',
+    "urlSpeedTest" TEXT NOT NULL,
+    "urlMinhaConexao" TEXT NOT NULL,
+    "urlFacebook" TEXT NOT NULL,
+    "urlInstagram" TEXT NOT NULL,
+    "urlWhatsapp" TEXT NOT NULL,
+    "emailAtendimento" TEXT NOT NULL,
+    "emailComercial" TEXT NOT NULL,
+    "telefonePrincipal" TEXT NOT NULL,
+    "urlLocalizacao" TEXT NOT NULL,
+    "multipleCitys" BOOLEAN NOT NULL
+);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "education_id_key" ON "education"("id");
+CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "typeEducation_name_key" ON "typeEducation"("name");
+CREATE UNIQUE INDEX "Vacancy_id_key" ON "Vacancy"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "selectProcess_id_key" ON "selectProcess"("id");
+CREATE UNIQUE INDEX "ParticipantVacancy_id_key" ON "ParticipantVacancy"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "shop_id_key" ON "shop"("id");
@@ -144,23 +141,17 @@ CREATE UNIQUE INDEX "profileBandwidth_id_key" ON "profileBandwidth"("id");
 -- CreateIndex
 CREATE UNIQUE INDEX "benefits_id_key" ON "benefits"("id");
 
--- AddForeignKey
-ALTER TABLE "education" ADD CONSTRAINT "education_curriculum_id_fkey" FOREIGN KEY ("curriculum_id") REFERENCES "curriculum"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "basicConfiguration_urlCentralCliente_key" ON "basicConfiguration"("urlCentralCliente");
 
 -- AddForeignKey
-ALTER TABLE "education" ADD CONSTRAINT "education_type_fkey" FOREIGN KEY ("type") REFERENCES "typeEducation"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "vacancyParticipations" ADD CONSTRAINT "vacancyParticipations_idCurriculum_fkey" FOREIGN KEY ("idCurriculum") REFERENCES "curriculum"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "vacancyParticipations" ADD CONSTRAINT "vacancyParticipations_idVacancy_fkey" FOREIGN KEY ("idVacancy") REFERENCES "selectProcess"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ParticipantVacancy" ADD CONSTRAINT "ParticipantVacancy_idVacancy_fkey" FOREIGN KEY ("idVacancy") REFERENCES "Vacancy"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "locations" ADD CONSTRAINT "locations_idShop_fkey" FOREIGN KEY ("idShop") REFERENCES "shop"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "plains" ADD CONSTRAINT "plains_idProfileBandwidth_fkey" FOREIGN KEY ("idProfileBandwidth") REFERENCES "profileBandwidth"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "plains" ADD CONSTRAINT "plains_idProfileBandwidth_fkey" FOREIGN KEY ("idProfileBandwidth") REFERENCES "profileBandwidth"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "plainsBenefits" ADD CONSTRAINT "plainsBenefits_idPlains_fkey" FOREIGN KEY ("idPlains") REFERENCES "plains"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,14 +1,12 @@
 import {
   Body,
-  Controller,
-  Delete,
-  Get,
+  Controller, Get,
   Inject,
   Param,
   Patch,
   Post,
   Put,
-  Query,
+  Query
 } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
@@ -16,17 +14,12 @@ import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { ApiResponseType } from '../../common/swagger/response.decorator';
 
 import { ShopPresenter } from './shop.presenter';
-import { SearchByPlain_PlainsBenefits } from '@useCases/plain-benefit/searchByPlain.usecases';
-import { ClearBenefitsByPlain_PlainsBenefits } from '@useCases/plain-benefit/ClearBenefitsByPlain.usecases';
-import { Update_PlainsBenefits } from '@useCases/plain-benefit/updateBenefitsByPlain.usecases';
-import { DeleteByLocations_PlainsLocations } from '@useCases/plain-location/ClearPlainsByLocation.usecases';
-import { Update_PlainsLocations } from '@useCases/plain-location/UpdatePlainsByLocation.usecases';
-import { Get_PlainsLocationsByLocations } from '@useCases/plain-location/searchByLocation.usecases';
 import { Get_Shop } from '@useCases/shop/search.usecases';
 import { Update_Shop } from '@useCases/shop/update.usecases';
 import { Disable_Shop } from '@useCases/shop/disable.usecases';
 import { Create_Shop } from '@useCases/shop/create.usecases';
-import { addShopDto, searchShopDto } from './shop.dto';
+import { addShopDto, searchByLocation, searchShopDto } from './shop.dto';
+import { GetByLocation_Shop } from '@useCases/shop/searchByLocation.usecases';
 
 @Controller('Shop')
 @ApiTags('Shop')
@@ -49,6 +42,10 @@ export class ShopController {
     //create
     @Inject(UsecasesProxyModule.CREATE_SHOP_PROXY)
     private readonly create: UseCaseProxy<Create_Shop>,
+
+    //get By Location
+    @Inject(UsecasesProxyModule.SEARCH_BYLOCATION_SHOP_PROXY)
+    private readonly searchByLocation: UseCaseProxy<GetByLocation_Shop>,
   ) {}
 
   @Post('')
@@ -81,6 +78,13 @@ export class ShopController {
     const { data } = await this.search.getInstance().execute({ isActive });
 
     return data.map((item) => new ShopPresenter(item));
+  }
+
+  @Get('ByLocation') // Defina a rota com um parâmetro chamado 'id'
+  @ApiResponseType(ShopPresenter, true)
+  async SearchByLocation(@Query() dto: searchByLocation) {
+    const { data } = await this.searchByLocation.getInstance().execute({ idLocation: dto.idLocation });
+    return new ShopPresenter(data);
   }
 
   @Put(':id')

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Post } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
 import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
@@ -7,6 +7,7 @@ import { BenefitPresenter } from './benefit.presenter';
 import { addBenefitDto } from './benefit.dto';
 import { Create_Benefits } from '@useCases/benefits/create.usecases';
 import { Get_Benefits } from '@useCases/benefits/search.usecases';
+import { Delete_Benefits } from '@useCases/benefits/delete.usecases';
 
 
 
@@ -25,6 +26,11 @@ export class BenefitController {
     //Get BandWidthProfile
     @Inject(UsecasesProxyModule.SEARCH_BENEFITS_USECASES_PROXY)
     private readonly SearchBenefitUseCasesProxy: UseCaseProxy<Get_Benefits>,
+
+    //delete 
+    @Inject(UsecasesProxyModule.DELETE_BENEFITS_USECASES_PROXY)
+    private readonly DeleteBenefitUseCase: UseCaseProxy<Delete_Benefits>,
+
 
 
   ) {}
@@ -47,5 +53,8 @@ export class BenefitController {
     return ReceivedUseCase.data.map(item => new BenefitPresenter(item));
   }
 
-
+  @Delete(':id')
+  async Delete(@Param('id') idBenefit: string) {
+    await this.DeleteBenefitUseCase.getInstance().execute({id: idBenefit})
+  }
 }

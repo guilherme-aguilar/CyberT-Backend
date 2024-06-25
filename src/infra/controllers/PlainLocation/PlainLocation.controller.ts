@@ -7,19 +7,14 @@ import {
   Param, Put
 } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy';
-import { UsecasesProxyModule } from '../../usecases-proxy/usecases-proxy.module';
-import { ApiResponseType } from '../../common/swagger/response.decorator';
-
-
 import { PlainLocationByPlainPresenter, PlainLocationPresenter } from './PlainLocation.presenter';
 import { addPlainLocationDto } from './PlainLocation.dto';
-import { SearchByPlain_PlainsBenefits } from '@useCases/plain-benefit/searchByPlain.usecases';
-import { ClearBenefitsByPlain_PlainsBenefits } from '@useCases/plain-benefit/ClearBenefitsByPlain.usecases';
-import { Update_PlainsBenefits } from '@useCases/plain-benefit/updateBenefitsByPlain.usecases';
-import { DeleteByLocations_PlainsLocations } from '@useCases/plain-location/ClearPlainsByLocation.usecases';
 import { Update_PlainsLocations } from '@useCases/plain-location/UpdatePlainsByLocation.usecases';
 import { Get_PlainsLocationsByLocations } from '@useCases/plain-location/searchByLocation.usecases';
+import { UsecasesProxyModule } from '@infra/usecases-proxy/usecases-proxy.module';
+import { UseCaseProxy } from '@infra/usecases-proxy/usecases-proxy';
+import { ApiResponseType } from '@infra/common/swagger/response.decorator';
+import { DeleteByLocations_PlainsLocations } from '@useCases/plain-location/clearPlainsByLocation.usecases';
 
 
 @Controller('PlainLocation')

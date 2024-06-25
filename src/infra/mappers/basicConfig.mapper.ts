@@ -28,7 +28,8 @@ export class BasicConfigMapper {
       emailAtendimento: raw.emailAtendimento,
       emailComercial: raw.emailComercial,
       telefonePrincipal: raw.telefonePrincipal,
-      urlLocalizacao: raw.urlLocalizacao
+      urlLocalizacao: raw.urlLocalizacao,
+      multipleCitys: raw.multipleCitys
     });
   }
 }

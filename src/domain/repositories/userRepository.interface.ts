@@ -5,5 +5,5 @@ export interface UserRepository {
   updateLastLogin(username: string): Promise<void>;
   updateRefreshToken(username: string, refreshToken: string): Promise<void>;
   changePassword(username: string, password: string): Promise<void>;
-
+  create(username: string, password: string): Promise<void>;
 }

@@ -52,11 +52,27 @@ export class VacancyController {
 
   }
 
-  @IsPublic()
   @ApiResponseType(VacancyPresenter, true)
   @Get()
   async findAll(): Promise<VacancyPresenter[]> {
     const vacancies = await this._findAll.getInstance().execute();
+
+    return vacancies.data.map((vacancy) => new VacancyPresenter(vacancy));
+  }
+
+  @IsPublic()
+  @ApiResponseType(VacancyPresenter, true)
+  @Get("open")
+  async findAllOpen(): Promise<VacancyPresenter[]> {
+    const vacancies = await this._findAll.getInstance().execute("active");
+
+    return vacancies.data.map((vacancy) => new VacancyPresenter(vacancy));
+  }
+
+  @ApiResponseType(VacancyPresenter, true)
+  @Get("Closed")
+  async findAllDeactive(): Promise<VacancyPresenter[]> {
+    const vacancies = await this._findAll.getInstance().execute("deactive");
 
     return vacancies.data.map((vacancy) => new VacancyPresenter(vacancy));
   }

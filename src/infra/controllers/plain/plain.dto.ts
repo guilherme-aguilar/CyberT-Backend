@@ -21,7 +21,7 @@ export class addPlainDto {
   discountPrice: string;
 
   @ApiProperty({ required: false })
-  @IsNotEmpty()
+  @IsOptional()
   idProfileBandwidth: string;
 }
 

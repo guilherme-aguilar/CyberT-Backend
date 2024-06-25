@@ -6,12 +6,31 @@ import { PrismaPlainsBenefitsMapper } from '@infra/mappers/prismaPlainsBenefitsM
 
 @Injectable()
 export class PrismaPlainsBenefitsRepository
-  implements PlainsBenefitsRepository
-{
-  constructor(private prismaService: PrismaService) {}
+  implements PlainsBenefitsRepository {
+  constructor(private prismaService: PrismaService) { }
+
+  async deleteAllByBenefit(id: string): Promise<void> {
+    await this.prismaService.plainsBenefits.deleteMany({
+      where: {
+        idBenefits: id
+      }
+    })
+  }
+
+  async getByBenefit(idBenefit: string): Promise<PlainsBenefits[]> {
+    const prismaData = await this.prismaService.plainsBenefits.findMany({
+      where: {
+        idBenefits: idBenefit
+      }
+    })
+
+    const row = prismaData.map(PrismaPlainsBenefitsMapper.toDomain)
+
+    return row
+  }
 
 
-  async create(request:  PlainsBenefits): Promise<void> {
+  async create(request: PlainsBenefits): Promise<void> {
 
     const row = PrismaPlainsBenefitsMapper.toPrisma(request)
 
@@ -32,9 +51,9 @@ export class PrismaPlainsBenefitsRepository
   }
 
   async deleteAllByPlain(id: string): Promise<void> {
-    
+
     await this.prismaService.plainsBenefits.deleteMany({
-      where: { idPlains : id}
+      where: { idPlains: id }
     });
 
   }

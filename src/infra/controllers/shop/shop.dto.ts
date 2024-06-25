@@ -34,3 +34,9 @@ export class searchShopDto {
   @ApiProperty({ required: false })
   isActive ?: string
 }
+
+export class searchByLocation {
+  @ApiProperty({ required: false })
+  idLocation ?: string
+}
+

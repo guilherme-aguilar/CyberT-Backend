@@ -7,7 +7,6 @@ import { AllExceptionFilter } from './infra/common/filter/exception.filter';
 import { LoggingInterceptor } from './infra/common/interceptors/logger.interceptor';
 import { ResponseFormat, ResponseInterceptor } from './infra/common/interceptors/response.interceptor';
 import { LoggerService } from './infra/logger/logger.service';
-import { JwtAuthGuard } from './infra/common/guards/jwtAuth.guard';
 
 async function bootstrap() {
   const env = process.env.NODE_ENV;
@@ -22,7 +21,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.enableCors({
-    origin: 'http://localhost:3333',
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authentication', 'Set-Cookie'],
     credentials: true,
@@ -53,6 +52,6 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
   }
 
-  await app.listen(3000);
+  await app.listen(8400);
 }
 bootstrap();

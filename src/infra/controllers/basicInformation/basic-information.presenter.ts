@@ -32,6 +32,9 @@ export class BasicConfigurationPresenter {
   @ApiProperty()
   urlLocalizacao: string;
 
+  @ApiProperty()
+  multipleCitys: boolean;
+
   constructor(raw: BasicConfiguraction) {
     this.urlCentralCliente = raw.urlCentralCliente;
     this.urlSpeedTest = raw.urlSpeedTest;
@@ -43,5 +46,6 @@ export class BasicConfigurationPresenter {
     this.emailComercial = raw.emailComercial;
     this.telefonePrincipal = raw.telefonePrincipal;
     this.urlLocalizacao = raw.urlLocalizacao;
+    this.multipleCitys = raw.multipleCitys;
   }
 }

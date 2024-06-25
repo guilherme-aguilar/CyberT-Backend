@@ -2,21 +2,21 @@ import { DynamicModule, Module } from '@nestjs/common';
 
 import { UseCaseProxy } from './usecases-proxy';
 
-import { RepositoriesModule } from 'src/infra/repositories/repositories.module';
+import { RepositoriesModule } from '@infra/repositories/repositories.module';
 
-import { JwtTokenService } from 'src/infra/services/jwt/jwt.service';
-import { LoggerService } from 'src/infra/logger/logger.service';
-import { EnvironmentConfigService } from 'src/infra/config/environment-config/environment-config.service';
-import { BcryptService } from 'src/infra/services/bcrypt/bcrypt.service';
-import { LoginUseCases } from 'src/useCases/auth/login.usecases';
-import { LoggerModule } from 'src/infra/logger/logger.module';
+import { JwtTokenService } from '@infra/services/jwt/jwt.service';
+import { LoggerService } from '@infra/logger/logger.service';
+import { EnvironmentConfigService } from '@infra/config/environment-config/environment-config.service';
+import { BcryptService } from '@infra/services/bcrypt/bcrypt.service';
+import { LoginUseCases } from '@useCases/auth/login.usecases';
+import { LoggerModule } from '@infra/logger/logger.module';
 
-import { BcryptModule } from 'src/infra/services/bcrypt/bcrypt.module';
-import { EnvironmentConfigModule } from 'src/infra/config/environment-config/environment-config.module';
-import { ExceptionsModule } from 'src/infra/exceptions/exceptions.module';
-import { IsAuthenticatedUseCases } from 'src/usecases/auth/isAuthenticated.usecases';
-import { LogoutUseCases } from 'src/usecases/auth/logout.usecases';
-import { JwtModule } from 'src/infra/services/jwt/jwt.module';
+import { BcryptModule } from '@infra/services/bcrypt/bcrypt.module';
+import { EnvironmentConfigModule } from '@infra/config/environment-config/environment-config.module';
+import { ExceptionsModule } from '@infra/exceptions/exceptions.module';
+import { IsAuthenticatedUseCases } from '@useCases/auth/isAuthenticated.usecases';
+import { LogoutUseCases } from '@useCases/auth/logout.usecases';
+import { JwtModule } from '@infra/services/jwt/jwt.module';
 import { DatabaseUserRepository } from '@infra/repositories/prisma/user.repository';
 import { PrismaBandwidthProfileRepository } from '@infra/repositories/prisma/prismaBandwidthProfileRepository';
 import { Create_BandwidthProfile } from '@useCases/bandwidth-profile/new.usecases';
@@ -46,7 +46,7 @@ import { Update_PlainsBenefits } from '@useCases/plain-benefit/updateBenefitsByP
 import { Get_PlainsLocationsByLocations } from '@useCases/plain-location/searchByLocation.usecases';
 import { PrismaPlainsLocationsRepository } from '@infra/repositories/prisma/prismaPlainsLocationsRepository';
 import { Update_PlainsLocations } from '@useCases/plain-location/UpdatePlainsByLocation.usecases';
-import { DeleteByLocations_PlainsLocations } from '@useCases/plain-location/ClearPlainsByLocation.usecases';
+import { DeleteByLocations_PlainsLocations } from '@useCases/plain-location/clearPlainsByLocation.usecases';
 import { GetByLocation_Plain } from '@useCases/plain/searchByLocation.usecases';
 import { PrismaShopRepository } from '@infra/repositories/prisma/prismaShopRepository';
 import { Get_Shop } from '@useCases/shop/search.usecases';
@@ -54,7 +54,6 @@ import { Update_Shop } from '@useCases/shop/update.usecases';
 import { Disable_Shop } from '@useCases/shop/disable.usecases';
 import { Create_Shop } from '@useCases/shop/create.usecases';
 import { PrismaBasicConfigRepository } from '@infra/repositories/prisma/PrismaBasicConfigRepository';
-import { BasicConfigRepository } from '@app/repositories/basicConfigRepository';
 import { Search_BasicConfig } from '@useCases/basic-config/search.usecases';
 import { Update_BasicConfig } from '@useCases/basic-config/update.usecases';
 import { Find_Vacancy } from '@useCases/vacancy/find.usecases';
@@ -68,6 +67,9 @@ import { Findall_ParticipantVacancy } from '@useCases/participant-vacancy/findAl
 import { FindById_ParticipantVacancy } from '@useCases/participant-vacancy/findById.usecases';
 import { FindByVacancy_ParticipantVacancy } from '@useCases/participant-vacancy/findByVacancy.usecases';
 import { ChangePassword_User } from '@useCases/user/changePassword.usecases';
+import { GenerateInitial_User } from '@useCases/user/generateInitialUser.usecases';
+import { Delete_Benefits } from '@useCases/benefits/delete.usecases';
+import { GetByLocation_Shop } from '@useCases/shop/searchByLocation.usecases';
 
 @Module({
   imports: [
@@ -97,6 +99,7 @@ export class UsecasesProxyModule {
   // Benefit
   static NEW_BENEFITS_USECASES_PROXY = 'NewBenefitsUseCasesProxy';
   static SEARCH_BENEFITS_USECASES_PROXY = 'SearchBenefitsUseCasesProxy';
+  static DELETE_BENEFITS_USECASES_PROXY = 'DeleteAllBenefitUseCasesProxy';
 
   // City
   static NEW_CITY_PROXY = 'NewCityUseCasesProxy';
@@ -112,13 +115,12 @@ export class UsecasesProxyModule {
   static DISABLE_PLAIN_PROXY = 'DisablePlainUseCasesProxy';
 
   // PlainBenefit
-  static SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY =
-    'SearchPlainBenefitByPlainUseCasesProxy';
+  static SEARCH_PLAIN_BENEFIT_BY_PLAIN_PROXY = 'SearchPlainBenefitByPlainUseCasesProxy';
   static UPDATE_PLAIN_BENEFIT_PROXY = 'UpdatePlainBenefitUseCasesProxy';
-  static DELETE_ALL_BENEFIT_BY_PLAIN_PROXY =
-    'DeleteAllBenefitByPlainUseCasesProxy';
+  static DELETE_ALL_BENEFIT_BY_PLAIN_PROXY = 'DeleteAllBenefitByPlainUseCasesProxy';
 
-  // PlainBenefit
+
+  // PlainLocation
   static SEARCH_PLAIN_LOCATION_BY_LOCATION_PROXY =
     'SearchPlainLocationByLocationUseCasesProxy';
   static UPDATE_PLAIN_LOCATION_PROXY = 'UpdatePlainLocationUseCasesProxy';
@@ -127,6 +129,7 @@ export class UsecasesProxyModule {
 
   // Shop
   static SEARCH_SHOP_PROXY = 'SearchShopUseCasesProxy';
+  static SEARCH_BYLOCATION_SHOP_PROXY = 'SearchByLocationShopUseCasesProxy';
   static UPDATE_SHOP_PROXY = 'UpdateShopUseCasesProxy';
   static DISABLE_SHOP_PROXY = 'DisableShopUseCasesProxy';
   static CREATE_SHOP_PROXY = 'CreateShopUseCasesProxy';
@@ -156,6 +159,7 @@ export class UsecasesProxyModule {
 
   //User
   static CHANGE_PASSWORD_USER_PROXY = 'ChangePasswordUserUseCasesProxy';
+  static GENERATE_INITIAL_USER = "GenerateInitialUserUseCasesProxy"
 
   static register(): DynamicModule {
     return {
@@ -247,6 +251,18 @@ export class UsecasesProxyModule {
             new UseCaseProxy(new Get_Benefits(BenefitsRepository)),
         },
 
+        {
+          provide: UsecasesProxyModule.DELETE_BENEFITS_USECASES_PROXY,
+          inject: [
+            PrismaBenefitsRepository, 
+            PrismaPlainsBenefitsRepository
+          ],
+          useFactory: (
+            BenefitsRepository: PrismaBenefitsRepository, 
+            plainBenefitRepository: PrismaPlainsBenefitsRepository
+          ) => new UseCaseProxy(new Delete_Benefits(BenefitsRepository, plainBenefitRepository)),
+        },
+
         //City Acctions Crud start =======================================================
         {
           inject: [PrismaCityRepository, BrasilApiService],
@@ -288,10 +304,14 @@ export class UsecasesProxyModule {
         },
 
         {
-          inject: [PrismaPlainRepository],
+          inject: [PrismaPlainRepository, PrismaPlainsBenefitsRepository,PrismaBenefitsRepository,],
           provide: UsecasesProxyModule.SEARCH_PLAIN_PROXY,
-          useFactory: (repository: PrismaPlainRepository) =>
-            new UseCaseProxy(new Get_Plain(repository)),
+          useFactory: (
+            repository: PrismaPlainRepository,
+            PlainBenefitsRepository: PrismaPlainsBenefitsRepository,
+            BenefitsRepository: PrismaBenefitsRepository,
+          ) =>
+            new UseCaseProxy(new Get_Plain(repository, PlainBenefitsRepository, BenefitsRepository)),
         },
 
         {
@@ -394,6 +414,12 @@ export class UsecasesProxyModule {
           provide: UsecasesProxyModule.SEARCH_SHOP_PROXY,
           useFactory: (repository: PrismaShopRepository) =>
             new UseCaseProxy(new Get_Shop(repository)),
+        },
+        {
+          inject: [PrismaShopRepository, PrismaCityRepository],
+          provide: UsecasesProxyModule.SEARCH_BYLOCATION_SHOP_PROXY,
+          useFactory: (repository: PrismaShopRepository, shopRepository: PrismaCityRepository) =>
+            new UseCaseProxy(new GetByLocation_Shop(repository, shopRepository)),
         },
         {
           inject: [PrismaShopRepository],
@@ -516,6 +542,21 @@ export class UsecasesProxyModule {
               ),
             ),
         },
+        {
+          inject: [DatabaseUserRepository, BcryptService],
+          provide:
+            UsecasesProxyModule.GENERATE_INITIAL_USER,
+          useFactory: (
+            userRepository: DatabaseUserRepository,
+            bcryptService: BcryptService,
+          ) =>
+            new UseCaseProxy(
+              new GenerateInitial_User(
+                userRepository,
+                bcryptService,
+              ),
+            ),
+        },
       ],
       exports: [
         //Auth Export
@@ -531,6 +572,7 @@ export class UsecasesProxyModule {
         //Benefits Export
         UsecasesProxyModule.NEW_BENEFITS_USECASES_PROXY,
         UsecasesProxyModule.SEARCH_BENEFITS_USECASES_PROXY,
+        UsecasesProxyModule.DELETE_BENEFITS_USECASES_PROXY,
 
         //City Export
         UsecasesProxyModule.NEW_CITY_PROXY,
@@ -557,6 +599,7 @@ export class UsecasesProxyModule {
 
         //Shop Export
         UsecasesProxyModule.SEARCH_SHOP_PROXY,
+        UsecasesProxyModule.SEARCH_BYLOCATION_SHOP_PROXY,
         UsecasesProxyModule.UPDATE_SHOP_PROXY,
         UsecasesProxyModule.DISABLE_SHOP_PROXY,
         UsecasesProxyModule.CREATE_SHOP_PROXY,
@@ -578,7 +621,8 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.FIND_BY_VACANCY_PARTICIPANT_VACANCY_PROXY,
 
         //User Export
-        UsecasesProxyModule.CHANGE_PASSWORD_USER_PROXY
+        UsecasesProxyModule.CHANGE_PASSWORD_USER_PROXY,
+        UsecasesProxyModule.GENERATE_INITIAL_USER
       ],
     };
   }
