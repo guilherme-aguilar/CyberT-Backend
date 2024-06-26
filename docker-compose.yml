@@ -5,24 +5,49 @@ services:
     image: postgres:latest
     container_name: postgres
     environment:
-      POSTGRES_DB: ${DATABASE_DB}
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASS}
-    ports:
-      - "${DATABASE_PORT}:5432"
+      POSTGRES_DB: cyberTelecom
+      POSTGRES_USER: postgresql
+      POSTGRES_PASSWORD: postgresql
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      cyber-app:
+        ipv4_address: 172.18.0.2
 
-  # portainer:
-  #   image: portainer/portainer-ce:latest
-  #   container_name: portainer
-  #   ports:
-  #     - "9000:9000"
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - portainer_data:/data
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      portainer-net:
+        ipv4_address: 172.20.0.2
+
+  cbt-backend:
+    image: cbt-backend:latest
+    container_name: cbt-backend
+    ports:
+      - "8400:8400"
+    networks:
+      cyber-app:
+        ipv4_address: 172.18.0.3
 
 volumes:
   postgres_data:
   portainer_data:
 
+networks:
+  cyber-app:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/27
+
+  portainer-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/27
